@@ -1,0 +1,1759 @@
+\begin{thebibliography}{}
+
+\bibitem [\protect \citeauthoryear {%
+Alzubaidi%
+\ \protect \BOthers {.}}{%
+Alzubaidi%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2021}}%
+}]{%
+alzubaidi2021review}
+\APACinsertmetastar {%
+alzubaidi2021review}%
+\begin{APACrefauthors}%
+Alzubaidi, L.%
+, Zhang, J.%
+, Humaidi, A\BPBI J.%
+, Al-Dujaili, A.%
+, Duan, Y.%
+, Al-Shamma, O.%
+\BDBL {}Farhan, L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Review of deep learning: concepts, CNN architectures,
+  challenges, applications, future directions} {Review of deep learning:
+  concepts, cnn architectures, challenges, applications, future
+  directions}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of big Data}{8}{}{1--74}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Amundsen%
+}{%
+Amundsen%
+}{%
+{\protect \APACyear {2001}}%
+}]{%
+amundsen2001elimination}
+\APACinsertmetastar {%
+amundsen2001elimination}%
+\begin{APACrefauthors}%
+Amundsen, L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2001}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Elimination of free-surface related multiples without
+  need of the source wavelet} {Elimination of free-surface related multiples
+  without need of the source wavelet}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysics}{66}{1}{327--341}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Bagchi%
+\ \BBA {} Mitra%
+}{%
+Bagchi%
+\ \BBA {} Mitra%
+}{%
+{\protect \APACyear {1996}}%
+}]{%
+bagchi1996nonuniform}
+\APACinsertmetastar {%
+bagchi1996nonuniform}%
+\begin{APACrefauthors}%
+Bagchi, S.%
+\BCBT {}\ \BBA {} Mitra, S\BPBI K.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1996}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The nonuniform discrete Fourier transform and its
+  applications in filter design. I. 1-D} {The nonuniform discrete fourier
+  transform and its applications in filter design. i. 1-d}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{IEEE Transactions on Circuits and Systems II: Analog
+  and Digital Signal Processing}{43}{6}{422--433}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Beylkin%
+}{%
+Beylkin%
+}{%
+{\protect \APACyear {1987}}%
+}]{%
+beylkin1987discrete}
+\APACinsertmetastar {%
+beylkin1987discrete}%
+\begin{APACrefauthors}%
+Beylkin, G.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1987}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Discrete radon transform} {Discrete radon
+  transform}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{IEEE transactions on acoustics, speech, and signal
+  processing}{35}{2}{162--172}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Bilsby%
+, Kumar%
+, Vassallo%
+\BCBL {}\ \BBA {} Zarkhidze%
+}{%
+Bilsby%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+bilsby2023multistage}
+\APACinsertmetastar {%
+bilsby2023multistage}%
+\begin{APACrefauthors}%
+Bilsby, P.%
+, Kumar, R.%
+, Vassallo, M.%
+\BCBL {}\ \BBA {} Zarkhidze, A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Multistage matching pursuit Fourier interpolation with
+  physics-based priors} {Multistage matching pursuit fourier interpolation with
+  physics-based priors}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {84th EAGE Annual Conference \& Exhibition} {84th eage
+  annual conference \& exhibition}\ (\BVOL\ 2023, \BPGS\ 1--5).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Boiero%
+\ \BBA {} Bagaini%
+}{%
+Boiero%
+\ \BBA {} Bagaini%
+}{%
+{\protect \APACyear {2021}}%
+}]{%
+boiero2021up}
+\APACinsertmetastar {%
+boiero2021up}%
+\begin{APACrefauthors}%
+Boiero, D.%
+\BCBT {}\ \BBA {} Bagaini, C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Up and down deconvolution in complex geological
+  scenarios} {Up and down deconvolution in complex geological
+  scenarios}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysics}{86}{5}{WC55--WC65}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Chen%
+\ \protect \BOthers {.}}{%
+Chen%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2022}}%
+}]{%
+chen2022novel}
+\APACinsertmetastar {%
+chen2022novel}%
+\begin{APACrefauthors}%
+Chen, X.%
+, Yu, R.%
+, Ullah, S.%
+, Wu, D.%
+, Li, Z.%
+, Li, Q.%
+\BDBL {}Zhang, Y.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A novel loss function of deep learning in wind speed
+  forecasting} {A novel loss function of deep learning in wind speed
+  forecasting}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Energy}{238}{}{121808}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Claerbout%
+}{%
+Claerbout%
+}{%
+{\protect \APACyear {1976}}%
+}]{%
+claerbout1976fundamentals}
+\APACinsertmetastar {%
+claerbout1976fundamentals}%
+\begin{APACrefauthors}%
+Claerbout, J\BPBI F.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{1976}.
+\newblock
+\APACrefbtitle {Fundamentals of geophysical data processing} {Fundamentals of
+  geophysical data processing}\ (\BVOL~274).
+\newblock
+\APACaddressPublisher{}{Citeseer}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Dargan%
+, Kumar%
+, Ayyagari%
+\BCBL {}\ \BBA {} Kumar%
+}{%
+Dargan%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2020}}%
+}]{%
+dargan2020survey}
+\APACinsertmetastar {%
+dargan2020survey}%
+\begin{APACrefauthors}%
+Dargan, S.%
+, Kumar, M.%
+, Ayyagari, M\BPBI R.%
+\BCBL {}\ \BBA {} Kumar, G.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A survey of deep learning and its applications: a new
+  paradigm to machine learning} {A survey of deep learning and its
+  applications: a new paradigm to machine learning}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Archives of Computational Methods in
+  Engineering}{27}{}{1071--1092}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Diebold%
+\ \BBA {} Stoffa%
+}{%
+Diebold%
+\ \BBA {} Stoffa%
+}{%
+{\protect \APACyear {1981}}%
+}]{%
+diebold1981traveltime}
+\APACinsertmetastar {%
+diebold1981traveltime}%
+\begin{APACrefauthors}%
+Diebold, J\BPBI B.%
+\BCBT {}\ \BBA {} Stoffa, P\BPBI L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1981}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The traveltime equation, tau-p mapping, and inversion of
+  common midpoint data} {The traveltime equation, tau-p mapping, and inversion
+  of common midpoint data}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysics}{46}{3}{238--254}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Dosovitskiy%
+\ \protect \BOthers {.}}{%
+Dosovitskiy%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2020}}%
+}]{%
+dosovitskiy2020image}
+\APACinsertmetastar {%
+dosovitskiy2020image}%
+\begin{APACrefauthors}%
+Dosovitskiy, A.%
+, Beyer, L.%
+, Kolesnikov, A.%
+, Weissenborn, D.%
+, Zhai, X.%
+, Unterthiner, T.%
+\BDBL {}others%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {An image is worth 16x16 words: Transformers for image
+  recognition at scale} {An image is worth 16x16 words: Transformers for image
+  recognition at scale}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2010.11929}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Gan%
+, Wang%
+, Chen%
+, Zhang%
+\BCBL {}\ \BBA {} Jin%
+}{%
+Gan%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2015}}%
+}]{%
+gan2015dealiased}
+\APACinsertmetastar {%
+gan2015dealiased}%
+\begin{APACrefauthors}%
+Gan, S.%
+, Wang, S.%
+, Chen, Y.%
+, Zhang, Y.%
+\BCBL {}\ \BBA {} Jin, Z.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2015}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Dealiased seismic data interpolation using seislet
+  transform with low-frequency constraint} {Dealiased seismic data
+  interpolation using seislet transform with low-frequency constraint}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{IEEE Geoscience and remote sensing
+  letters}{12}{10}{2150--2154}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Gao%
+, Shen%
+\BCBL {}\ \BBA {} Min%
+}{%
+Gao%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2024}}%
+}]{%
+gao2024swin}
+\APACinsertmetastar {%
+gao2024swin}%
+\begin{APACrefauthors}%
+Gao, L.%
+, Shen, H.%
+\BCBL {}\ \BBA {} Min, F.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Swin Transformer for simultaneous denoising and
+  interpolation of seismic data} {Swin transformer for simultaneous denoising
+  and interpolation of seismic data}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Computers \& Geosciences}{183}{}{105510}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Goodfellow%
+\ \protect \BOthers {.}}{%
+Goodfellow%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2014}}%
+}]{%
+goodfellow2014generative}
+\APACinsertmetastar {%
+goodfellow2014generative}%
+\begin{APACrefauthors}%
+Goodfellow, I.%
+, Pouget-Abadie, J.%
+, Mirza, M.%
+, Xu, B.%
+, Warde-Farley, D.%
+, Ozair, S.%
+\BDBL {}Bengio, Y.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2014}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Generative adversarial nets} {Generative adversarial
+  nets}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Advances in neural information processing
+  systems}{27}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Gu%
+\ \BBA {} Sacchi%
+}{%
+Gu%
+\ \BBA {} Sacchi%
+}{%
+{\protect \APACyear {2009}}%
+}]{%
+gu2009radon}
+\APACinsertmetastar {%
+gu2009radon}%
+\begin{APACrefauthors}%
+Gu, Y\BPBI J.%
+\BCBT {}\ \BBA {} Sacchi, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2009}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Radon transform methods and their applications in
+  mapping mantle reflectivity structure} {Radon transform methods and their
+  applications in mapping mantle reflectivity structure}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Surveys in geophysics}{30}{}{327--354}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Guo%
+, Fu%
+\BCBL {}\ \BBA {} Li%
+}{%
+Guo%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+guo2023seismic}
+\APACinsertmetastar {%
+guo2023seismic}%
+\begin{APACrefauthors}%
+Guo, Y.%
+, Fu, L.%
+\BCBL {}\ \BBA {} Li, H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Seismic data interpolation based on multi-scale
+  transformer} {Seismic data interpolation based on multi-scale
+  transformer}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{IEEE Geoscience and Remote Sensing Letters}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+He%
+, Zhang%
+, Ren%
+\BCBL {}\ \BBA {} Sun%
+}{%
+He%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2016}}%
+}]{%
+he2016deep}
+\APACinsertmetastar {%
+he2016deep}%
+\begin{APACrefauthors}%
+He, K.%
+, Zhang, X.%
+, Ren, S.%
+\BCBL {}\ \BBA {} Sun, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2016}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Deep residual learning for image recognition} {Deep
+  residual learning for image recognition}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the IEEE conference on computer vision
+  and pattern recognition} {Proceedings of the ieee conference on computer
+  vision and pattern recognition}\ (\BPGS\ 770--778).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Isola%
+, Zhu%
+, Zhou%
+\BCBL {}\ \BBA {} Efros%
+}{%
+Isola%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2017}}%
+}]{%
+isola2017image}
+\APACinsertmetastar {%
+isola2017image}%
+\begin{APACrefauthors}%
+Isola, P.%
+, Zhu, J\BHBI Y.%
+, Zhou, T.%
+\BCBL {}\ \BBA {} Efros, A\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Image-to-image translation with conditional adversarial
+  networks} {Image-to-image translation with conditional adversarial
+  networks}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the IEEE conference on computer vision
+  and pattern recognition} {Proceedings of the ieee conference on computer
+  vision and pattern recognition}\ (\BPGS\ 1125--1134).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Kaur%
+, Pham%
+\BCBL {}\ \BBA {} Fomel%
+}{%
+Kaur%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2019}}%
+}]{%
+kaur2019seismic}
+\APACinsertmetastar {%
+kaur2019seismic}%
+\begin{APACrefauthors}%
+Kaur, H.%
+, Pham, N.%
+\BCBL {}\ \BBA {} Fomel, S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Seismic data interpolation using CycleGAN} {Seismic data
+  interpolation using cyclegan}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {SEG technical program expanded abstracts 2019} {Seg
+  technical program expanded abstracts 2019}\ (\BPGS\ 2202--2206).
+\newblock
+\APACaddressPublisher{}{Society of Exploration Geophysicists}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Kaur%
+, Pham%
+\BCBL {}\ \BBA {} Fomel%
+}{%
+Kaur%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2021}}%
+}]{%
+kaur2021seismic}
+\APACinsertmetastar {%
+kaur2021seismic}%
+\begin{APACrefauthors}%
+Kaur, H.%
+, Pham, N.%
+\BCBL {}\ \BBA {} Fomel, S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Seismic data interpolation using deep learning with
+  generative adversarial networks} {Seismic data interpolation using deep
+  learning with generative adversarial networks}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysical Prospecting}{69}{2}{307--326}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Khosro~Anjom%
+, Vaccarino%
+\BCBL {}\ \BBA {} Socco%
+}{%
+Khosro~Anjom%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+khosro2023machine}
+\APACinsertmetastar {%
+khosro2023machine}%
+\begin{APACrefauthors}%
+Khosro~Anjom, F.%
+, Vaccarino, F.%
+\BCBL {}\ \BBA {} Socco, L\BPBI V.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Machine learning for seismic exploration: Where are we
+  and how far are we from the holy grail?} {Machine learning for seismic
+  exploration: Where are we and how far are we from the holy grail?}{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysics}{89}{1}{WA157--WA178}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Kingma%
+\ \BBA {} Ba%
+}{%
+Kingma%
+\ \BBA {} Ba%
+}{%
+{\protect \APACyear {2014}}%
+}]{%
+kingma2014adam}
+\APACinsertmetastar {%
+kingma2014adam}%
+\begin{APACrefauthors}%
+Kingma, D\BPBI P.%
+\BCBT {}\ \BBA {} Ba, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2014}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Adam: A method for stochastic optimization} {Adam: A
+  method for stochastic optimization}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:1412.6980}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Krizhevsky%
+, Sutskever%
+\BCBL {}\ \BBA {} Hinton%
+}{%
+Krizhevsky%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2012}}%
+}]{%
+krizhevsky2012imagenet}
+\APACinsertmetastar {%
+krizhevsky2012imagenet}%
+\begin{APACrefauthors}%
+Krizhevsky, A.%
+, Sutskever, I.%
+\BCBL {}\ \BBA {} Hinton, G\BPBI E.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2012}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Imagenet classification with deep convolutional neural
+  networks} {Imagenet classification with deep convolutional neural
+  networks}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Advances in neural information processing
+  systems}{25}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Kumar%
+, Dancer%
+, Rayment%
+, Hampson%
+\BCBL {}\ \BBA {} Burgess%
+}{%
+Kumar%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2022}}%
+}]{%
+kumar2022deep}
+\APACinsertmetastar {%
+kumar2022deep}%
+\begin{APACrefauthors}%
+Kumar, A.%
+, Dancer, K.%
+, Rayment, T.%
+, Hampson, G.%
+\BCBL {}\ \BBA {} Burgess, T.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2022}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Deep learning swell noise estimation} {Deep learning
+  swell noise estimation}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{First Break}{40}{9}{31--36}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Lau%
+}{%
+Lau%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+lau2024}
+\APACinsertmetastar {%
+lau2024}%
+\begin{APACrefauthors}%
+Lau, Y\BPBI T\BPBI R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{February 1}{}.
+\newblock
+\APACrefbtitle {Image Reconstruction using Generative Adversarial Networks}
+  {Image reconstruction using generative adversarial networks}\ \APACbVolEdTR
+  {}{Research Module Report}.
+\newblock
+\APACaddressInstitution{Zürich, Switzerland}{ETH Zürich}.
+\newblock
+\APACrefnote{Supervised by Dr. Rajiv Kumar, Dr. Massimiliano Vassallo, and Dr.
+  Dirk-Jan van Manen}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ledig%
+\ \protect \BOthers {.}}{%
+Ledig%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2017}}%
+}]{%
+ledig2017photo}
+\APACinsertmetastar {%
+ledig2017photo}%
+\begin{APACrefauthors}%
+Ledig, C.%
+, Theis, L.%
+, Husz{\'a}r, F.%
+, Caballero, J.%
+, Cunningham, A.%
+, Acosta, A.%
+\BDBL {}others%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Photo-realistic single image super-resolution using a
+  generative adversarial network} {Photo-realistic single image
+  super-resolution using a generative adversarial network}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the IEEE conference on computer vision
+  and pattern recognition} {Proceedings of the ieee conference on computer
+  vision and pattern recognition}\ (\BPGS\ 4681--4690).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+J.~Li%
+, Yan%
+, Liao%
+, Yang%
+\BCBL {}\ \BBA {} Shao%
+}{%
+J.~Li%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2021}}%
+}]{%
+li2021local}
+\APACinsertmetastar {%
+li2021local}%
+\begin{APACrefauthors}%
+Li, J.%
+, Yan, Y.%
+, Liao, S.%
+, Yang, X.%
+\BCBL {}\ \BBA {} Shao, L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Local-to-global self-attention in vision transformers}
+  {Local-to-global self-attention in vision transformers}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2107.04735}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+S.~Li%
+\ \protect \BOthers {.}}{%
+S.~Li%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2019}}%
+}]{%
+li2019deep}
+\APACinsertmetastar {%
+li2019deep}%
+\begin{APACrefauthors}%
+Li, S.%
+, Liu, B.%
+, Ren, Y.%
+, Chen, Y.%
+, Yang, S.%
+, Wang, Y.%
+\BCBL {}\ \BBA {} Jiang, P.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Deep-learning inversion of seismic data} {Deep-learning
+  inversion of seismic data}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:1901.07733}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+B.~Liu%
+\ \BBA {} Sacchi%
+}{%
+B.~Liu%
+\ \BBA {} Sacchi%
+}{%
+{\protect \APACyear {2004}}%
+}]{%
+liu2004minimum}
+\APACinsertmetastar {%
+liu2004minimum}%
+\begin{APACrefauthors}%
+Liu, B.%
+\BCBT {}\ \BBA {} Sacchi, M\BPBI D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2004}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Minimum weighted norm interpolation of seismic records}
+  {Minimum weighted norm interpolation of seismic records}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysics}{69}{6}{1560--1568}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Z.~Liu%
+\ \protect \BOthers {.}}{%
+Z.~Liu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2021}}%
+}]{%
+liu2021swin}
+\APACinsertmetastar {%
+liu2021swin}%
+\begin{APACrefauthors}%
+Liu, Z.%
+, Lin, Y.%
+, Cao, Y.%
+, Hu, H.%
+, Wei, Y.%
+, Zhang, Z.%
+\BDBL {}Guo, B.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Swin transformer: Hierarchical vision transformer using
+  shifted windows} {Swin transformer: Hierarchical vision transformer using
+  shifted windows}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the IEEE/CVF international conference on
+  computer vision} {Proceedings of the ieee/cvf international conference on
+  computer vision}\ (\BPGS\ 10012--10022).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Long%
+, Shelhamer%
+\BCBL {}\ \BBA {} Darrell%
+}{%
+Long%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2015}}%
+}]{%
+long2015fully}
+\APACinsertmetastar {%
+long2015fully}%
+\begin{APACrefauthors}%
+Long, J.%
+, Shelhamer, E.%
+\BCBL {}\ \BBA {} Darrell, T.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2015}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Fully convolutional networks for semantic segmentation}
+  {Fully convolutional networks for semantic segmentation}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the IEEE conference on computer vision
+  and pattern recognition} {Proceedings of the ieee conference on computer
+  vision and pattern recognition}\ (\BPGS\ 3431--3440).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Nabil%
+}{%
+Nabil%
+}{%
+{\protect \APACyear {2021}}%
+}]{%
+nabil2021unpacking}
+\APACinsertmetastar {%
+nabil2021unpacking}%
+\begin{APACrefauthors}%
+Nabil, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+\APACrefbtitle {Unpacking Query, Key, and Value in Transformers: An Analogy
+  with Databases.} {Unpacking query, key, and value in transformers: An analogy
+  with databases.}
+\newblock
+\APAChowpublished
+  {\url{https://www.linkedin.com/pulse/unpacking-query-key-value-transformers-analogy-database-mohamed-nabil}}.
+\newblock
+\APACrefnote{Accessed: 2024-07-23}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Naghizadeh%
+}{%
+Naghizadeh%
+}{%
+{\protect \APACyear {2012}}%
+}]{%
+naghizadeh2012seismic}
+\APACinsertmetastar {%
+naghizadeh2012seismic}%
+\begin{APACrefauthors}%
+Naghizadeh, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2012}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Seismic data interpolation and denoising in the
+  frequency-wavenumber domain} {Seismic data interpolation and denoising in the
+  frequency-wavenumber domain}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysics}{77}{2}{V71--V80}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+NVIDIA%
+}{%
+NVIDIA%
+}{%
+{\protect \APACyear {2020}}%
+}]{%
+nvidia2020ampere}
+\APACinsertmetastar {%
+nvidia2020ampere}%
+\begin{APACrefauthors}%
+NVIDIA.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+\APACrefbtitle {NVIDIA Ampere Architecture In-Depth.} {Nvidia ampere
+  architecture in-depth.}
+\newblock
+\begin{APACrefURL}
+  \url{https://developer.nvidia.com/blog/nvidia-ampere-architecture-in-depth/}
+  \end{APACrefURL}
+\newblock
+\APACrefnote{Accessed: 2024-07-18}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Oliveira%
+, Ferreira%
+, Silva%
+\BCBL {}\ \BBA {} Brazil%
+}{%
+Oliveira%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2018}}%
+}]{%
+oliveira2018interpolating}
+\APACinsertmetastar {%
+oliveira2018interpolating}%
+\begin{APACrefauthors}%
+Oliveira, D\BPBI A.%
+, Ferreira, R\BPBI S.%
+, Silva, R.%
+\BCBL {}\ \BBA {} Brazil, E\BPBI V.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2018}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Interpolating seismic data with conditional generative
+  adversarial networks} {Interpolating seismic data with conditional generative
+  adversarial networks}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{IEEE Geoscience and Remote Sensing
+  Letters}{15}{12}{1952--1956}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Oppenheim%
+}{%
+Oppenheim%
+}{%
+{\protect \APACyear {1999}}%
+}]{%
+oppenheim1999discrete}
+\APACinsertmetastar {%
+oppenheim1999discrete}%
+\begin{APACrefauthors}%
+Oppenheim, A\BPBI V.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{1999}.
+\newblock
+\APACrefbtitle {Discrete-time signal processing} {Discrete-time signal
+  processing}.
+\newblock
+\APACaddressPublisher{}{Pearson Education India}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+O'shea%
+\ \BBA {} Nash%
+}{%
+O'shea%
+\ \BBA {} Nash%
+}{%
+{\protect \APACyear {2015}}%
+}]{%
+o2015introduction}
+\APACinsertmetastar {%
+o2015introduction}%
+\begin{APACrefauthors}%
+O'shea, K.%
+\BCBT {}\ \BBA {} Nash, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2015}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {An introduction to convolutional neural networks} {An
+  introduction to convolutional neural networks}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:1511.08458}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ravasi%
+, Meles%
+, Curtis%
+, Rawlinson%
+\BCBL {}\ \BBA {} Yikuo%
+}{%
+Ravasi%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2015}}%
+}]{%
+ravasi2015seismic}
+\APACinsertmetastar {%
+ravasi2015seismic}%
+\begin{APACrefauthors}%
+Ravasi, M.%
+, Meles, G.%
+, Curtis, A.%
+, Rawlinson, Z.%
+\BCBL {}\ \BBA {} Yikuo, L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2015}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Seismic interferometry by multidimensional deconvolution
+  without wavefield separation} {Seismic interferometry by multidimensional
+  deconvolution without wavefield separation}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysical Journal International}{202}{1}{1--16}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ronen%
+}{%
+Ronen%
+}{%
+{\protect \APACyear {1987}}%
+}]{%
+ronen1987wave}
+\APACinsertmetastar {%
+ronen1987wave}%
+\begin{APACrefauthors}%
+Ronen, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1987}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Wave-equation trace interpolation} {Wave-equation trace
+  interpolation}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysics}{52}{7}{973--984}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ronneberger%
+, Fischer%
+\BCBL {}\ \BBA {} Brox%
+}{%
+Ronneberger%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2015}}%
+}]{%
+ronneberger2015u}
+\APACinsertmetastar {%
+ronneberger2015u}%
+\begin{APACrefauthors}%
+Ronneberger, O.%
+, Fischer, P.%
+\BCBL {}\ \BBA {} Brox, T.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2015}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {U-net: Convolutional networks for biomedical image
+  segmentation} {U-net: Convolutional networks for biomedical image
+  segmentation}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Medical Image Computing and Computer-Assisted
+  Intervention--MICCAI 2015: 18th International Conference, Munich, Germany,
+  October 5-9, 2015, Proceedings, Part III 18} {Medical image computing and
+  computer-assisted intervention--miccai 2015: 18th international conference,
+  munich, germany, october 5-9, 2015, proceedings, part iii 18}\ (\BPGS\
+  234--241).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+S%
+}{%
+S%
+}{%
+{\protect \APACyear {2023}}%
+}]{%
+javashs2023scrn}
+\APACinsertmetastar {%
+javashs2023scrn}%
+\begin{APACrefauthors}%
+S, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+\APACrefbtitle {SCRN: Swin Transformer for simultaneous denoising and
+  interpolation of seismic data.} {Scrn: Swin transformer for simultaneous
+  denoising and interpolation of seismic data.}
+\newblock
+\APAChowpublished {\url{https://github.com/javashs/SCRN}}.
+\newblock
+\APACrefnote{GitHub repository}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Saxena%
+\ \BBA {} Cao%
+}{%
+Saxena%
+\ \BBA {} Cao%
+}{%
+{\protect \APACyear {2021}}%
+}]{%
+saxena2021generative}
+\APACinsertmetastar {%
+saxena2021generative}%
+\begin{APACrefauthors}%
+Saxena, D.%
+\BCBT {}\ \BBA {} Cao, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Generative adversarial networks (GANs) challenges,
+  solutions, and future directions} {Generative adversarial networks (gans)
+  challenges, solutions, and future directions}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{ACM Computing Surveys (CSUR)}{54}{3}{1--42}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Schlumberger%
+}{%
+Schlumberger%
+}{%
+{\protect \APACyear {2016}}%
+}]{%
+schlumberger2016}
+\APACinsertmetastar {%
+schlumberger2016}%
+\begin{APACrefauthors}%
+Schlumberger.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2016}{{\APACmonth{04}}}{}.
+\newblock
+{\BBOQ}\APACrefatitle {3D Interpolation using IRREGULAR\_INTERP\_RDN: Best
+  Practice for 3D Time Domain Radon Interpolation (TDRI)} {3d interpolation
+  using irregular\_interp\_rdn: Best practice for 3d time domain radon
+  interpolation (tdri)}{\BBCQ}\ [\bibcomputersoftwaremanual].
+\newblock
+\APACrefnote{Issue Date: 15-April-2016, Revision: 1, Content ID: 6828843}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Schonewille%
+, Dishberger%
+\BCBL {}\ \BBA {} Kapadia%
+}{%
+Schonewille%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2014}}%
+}]{%
+schonewille2014comparison}
+\APACinsertmetastar {%
+schonewille2014comparison}%
+\begin{APACrefauthors}%
+Schonewille, M.%
+, Dishberger, D.%
+\BCBL {}\ \BBA {} Kapadia, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2014}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Comparison of 3D time-domain radon and matching-pursuit
+  Fourier interpolation} {Comparison of 3d time-domain radon and
+  matching-pursuit fourier interpolation}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {76th EAGE Conference and Exhibition 2014} {76th eage
+  conference and exhibition 2014}\ (\BVOL\ 2014, \BPGS\ 1--5).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Schonewille%
+, Yan%
+, Bayly%
+\BCBL {}\ \BBA {} Bisley%
+}{%
+Schonewille%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2013}}%
+}]{%
+schonewille2013matching}
+\APACinsertmetastar {%
+schonewille2013matching}%
+\begin{APACrefauthors}%
+Schonewille, M.%
+, Yan, Z.%
+, Bayly, M.%
+\BCBL {}\ \BBA {} Bisley, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2013}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Matching Pursuit Fourier Interpolation Using Priors
+  Derived from a Second Data Set} {Matching pursuit fourier interpolation using
+  priors derived from a second data set}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {SEG Technical Program Expanded Abstracts 2013} {Seg
+  technical program expanded abstracts 2013}\ (\BPGS\ 3651--3655).
+\newblock
+\APACaddressPublisher{}{Society of Exploration Geophysicists}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Shannon%
+}{%
+Shannon%
+}{%
+{\protect \APACyear {1949}}%
+}]{%
+shannon1949communication}
+\APACinsertmetastar {%
+shannon1949communication}%
+\begin{APACrefauthors}%
+Shannon, C\BPBI E.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1949}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Communication in the presence of noise} {Communication
+  in the presence of noise}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Proceedings of the IRE}{37}{1}{10--21}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Shrestha%
+\ \BBA {} Mahmood%
+}{%
+Shrestha%
+\ \BBA {} Mahmood%
+}{%
+{\protect \APACyear {2019}}%
+}]{%
+shrestha2019review}
+\APACinsertmetastar {%
+shrestha2019review}%
+\begin{APACrefauthors}%
+Shrestha, A.%
+\BCBT {}\ \BBA {} Mahmood, A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Review of deep learning algorithms and architectures}
+  {Review of deep learning algorithms and architectures}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{IEEE access}{7}{}{53040--53065}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Siahkoohi%
+, Kumar%
+\BCBL {}\ \BBA {} Herrmann%
+}{%
+Siahkoohi%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2018}}%
+}]{%
+siahkoohi2018seismic}
+\APACinsertmetastar {%
+siahkoohi2018seismic}%
+\begin{APACrefauthors}%
+Siahkoohi, A.%
+, Kumar, R.%
+\BCBL {}\ \BBA {} Herrmann, F.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2018}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Seismic data reconstruction with generative adversarial
+  networks} {Seismic data reconstruction with generative adversarial
+  networks}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {80th EAGE conference and exhibition 2018} {80th eage
+  conference and exhibition 2018}\ (\BVOL\ 2018, \BPGS\ 1--5).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Soubaras%
+}{%
+Soubaras%
+}{%
+{\protect \APACyear {1997}}%
+}]{%
+soubaras1997spatial}
+\APACinsertmetastar {%
+soubaras1997spatial}%
+\begin{APACrefauthors}%
+Soubaras, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1997}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Spatial interpolation of aliased seismic data} {Spatial
+  interpolation of aliased seismic data}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {67th Annual International Meeting, SEG, Expanded
+  Abstracts} {67th annual international meeting, seg, expanded abstracts}\
+  (\BPGS\ 1167--1170).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Spitz%
+}{%
+Spitz%
+}{%
+{\protect \APACyear {1991}}%
+}]{%
+spitz1991seismic}
+\APACinsertmetastar {%
+spitz1991seismic}%
+\begin{APACrefauthors}%
+Spitz, S.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1991}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Seismic trace interpolation in the FX domain} {Seismic
+  trace interpolation in the fx domain}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysics}{56}{6}{785--794}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Srinivas%
+\ \protect \BOthers {.}}{%
+Srinivas%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2021}}%
+}]{%
+srinivas2021bottleneck}
+\APACinsertmetastar {%
+srinivas2021bottleneck}%
+\begin{APACrefauthors}%
+Srinivas, A.%
+, Lin, T\BHBI Y.%
+, Parmar, N.%
+, Shlens, J.%
+, Abbeel, P.%
+\BCBL {}\ \BBA {} Vaswani, A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Bottleneck transformers for visual recognition}
+  {Bottleneck transformers for visual recognition}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the IEEE/CVF conference on computer
+  vision and pattern recognition} {Proceedings of the ieee/cvf conference on
+  computer vision and pattern recognition}\ (\BPGS\ 16519--16529).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Stolt%
+}{%
+Stolt%
+}{%
+{\protect \APACyear {2002}}%
+}]{%
+stolt2002seismic}
+\APACinsertmetastar {%
+stolt2002seismic}%
+\begin{APACrefauthors}%
+Stolt, R\BPBI H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2002}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Seismic data mapping and reconstruction} {Seismic data
+  mapping and reconstruction}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysics}{67}{3}{890--908}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Torbunov%
+\ \protect \BOthers {.}}{%
+Torbunov%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2023}}%
+}]{%
+torbunov2023uvcgan}
+\APACinsertmetastar {%
+torbunov2023uvcgan}%
+\begin{APACrefauthors}%
+Torbunov, D.%
+, Huang, Y.%
+, Yu, H.%
+, Huang, J.%
+, Yoo, S.%
+, Lin, M.%
+\BDBL {}Ren, Y.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Uvcgan: Unet vision transformer cycle-consistent gan for
+  unpaired image-to-image translation} {Uvcgan: Unet vision transformer
+  cycle-consistent gan for unpaired image-to-image translation}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the IEEE/CVF winter conference on
+  applications of computer vision} {Proceedings of the ieee/cvf winter
+  conference on applications of computer vision}\ (\BPGS\ 702--712).
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Vaswani%
+\ \protect \BOthers {.}}{%
+Vaswani%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2017}}%
+}]{%
+vaswani2017attention}
+\APACinsertmetastar {%
+vaswani2017attention}%
+\begin{APACrefauthors}%
+Vaswani, A.%
+, Shazeer, N.%
+, Parmar, N.%
+, Uszkoreit, J.%
+, Jones, L.%
+, Gomez, A\BPBI N.%
+\BDBL {}Polosukhin, I.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Attention is all you need} {Attention is all you
+  need}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Advances in neural information processing
+  systems}{30}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+J.~Wang%
+, Ng%
+\BCBL {}\ \BBA {} Perz%
+}{%
+J.~Wang%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2010}}%
+}]{%
+wang2010seismic}
+\APACinsertmetastar {%
+wang2010seismic}%
+\begin{APACrefauthors}%
+Wang, J.%
+, Ng, M.%
+\BCBL {}\ \BBA {} Perz, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2010}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Seismic data interpolation by greedy local Radon
+  transform} {Seismic data interpolation by greedy local radon
+  transform}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysics}{75}{6}{WB225--WB234}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Y.~Wang%
+, Grion%
+\BCBL {}\ \BBA {} Bale%
+}{%
+Y.~Wang%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2009}}%
+}]{%
+wang2009comes}
+\APACinsertmetastar {%
+wang2009comes}%
+\begin{APACrefauthors}%
+Wang, Y.%
+, Grion, S.%
+\BCBL {}\ \BBA {} Bale, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2009}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {What comes up must have gone down: The principle and
+  application of up-down deconvolution for multiple attenuation of ocean bottom
+  data} {What comes up must have gone down: The principle and application of
+  up-down deconvolution for multiple attenuation of ocean bottom data}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{CSEG Recorder}{34}{10}{10--16}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Wapenaar%
+\ \protect \BOthers {.}}{%
+Wapenaar%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2011}}%
+}]{%
+wapenaar2011seismic}
+\APACinsertmetastar {%
+wapenaar2011seismic}%
+\begin{APACrefauthors}%
+Wapenaar, K.%
+, Van Der~Neut, J.%
+, Ruigrok, E.%
+, Draganov, D.%
+, Hunziker, J.%
+, Slob, E.%
+\BDBL {}Snieder, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2011}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Seismic interferometry by crosscorrelation and by
+  multidimensional deconvolution: A systematic comparison} {Seismic
+  interferometry by crosscorrelation and by multidimensional deconvolution: A
+  systematic comparison}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysical Journal International}{185}{3}{1335--1364}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Wu%
+}{%
+Wu%
+}{%
+{\protect \APACyear {2017}}%
+}]{%
+wu2017introduction}
+\APACinsertmetastar {%
+wu2017introduction}%
+\begin{APACrefauthors}%
+Wu, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2017}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Introduction to convolutional neural networks}
+  {Introduction to convolutional neural networks}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{National Key Lab for Novel Software Technology. Nanjing
+  University. China}{5}{23}{495}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+J.~Xu%
+, Sun%
+, Zhang%
+, Zhao%
+\BCBL {}\ \BBA {} Lin%
+}{%
+J.~Xu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2019}}%
+}]{%
+xu2019understanding}
+\APACinsertmetastar {%
+xu2019understanding}%
+\begin{APACrefauthors}%
+Xu, J.%
+, Sun, X.%
+, Zhang, Z.%
+, Zhao, G.%
+\BCBL {}\ \BBA {} Lin, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Understanding and improving layer normalization}
+  {Understanding and improving layer normalization}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Advances in neural information processing
+  systems}{32}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+S.~Xu%
+, Zhang%
+\BCBL {}\ \BBA {} Lambar{\'e}%
+}{%
+S.~Xu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2010}}%
+}]{%
+xu2010antileakage}
+\APACinsertmetastar {%
+xu2010antileakage}%
+\begin{APACrefauthors}%
+Xu, S.%
+, Zhang, Y.%
+\BCBL {}\ \BBA {} Lambar{\'e}, G.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2010}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Antileakage Fourier transform for seismic data
+  regularization in higher dimensions} {Antileakage fourier transform for
+  seismic data regularization in higher dimensions}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysics}{75}{6}{WB113--WB120}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+S.~Xu%
+, Zhang%
+, Pham%
+\BCBL {}\ \BBA {} Lambar{\'e}%
+}{%
+S.~Xu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2005}}%
+}]{%
+xu2005antileakage}
+\APACinsertmetastar {%
+xu2005antileakage}%
+\begin{APACrefauthors}%
+Xu, S.%
+, Zhang, Y.%
+, Pham, D.%
+\BCBL {}\ \BBA {} Lambar{\'e}, G.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2005}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Antileakage Fourier transform for seismic data
+  regularization} {Antileakage fourier transform for seismic data
+  regularization}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Geophysics}{70}{4}{V87--V95}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Zou%
+, Shen%
+, Jie%
+, Zhang%
+\BCBL {}\ \BBA {} Liu%
+}{%
+Zou%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2019}}%
+}]{%
+zou2019sufficient}
+\APACinsertmetastar {%
+zou2019sufficient}%
+\begin{APACrefauthors}%
+Zou, F.%
+, Shen, L.%
+, Jie, Z.%
+, Zhang, W.%
+\BCBL {}\ \BBA {} Liu, W.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2019}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A sufficient condition for convergences of adam and
+  rmsprop} {A sufficient condition for convergences of adam and
+  rmsprop}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Proceedings of the IEEE/CVF Conference on computer
+  vision and pattern recognition} {Proceedings of the ieee/cvf conference on
+  computer vision and pattern recognition}\ (\BPGS\ 11127--11135).
+\PrintBackRefs{\CurrentBib}
+
+\end{thebibliography}

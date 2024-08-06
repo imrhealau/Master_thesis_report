@@ -1,0 +1,277 @@
+\section{Deep learning theory}
+Deep learning is a subset of machine learning that employs artificial neural networks with multiple layers to model and learn complex patterns in large datasets \cite{dargan2020survey}. It involves training these networks to automatically extract features and make predictions or decisions based on raw data, such as images, text, or sound. In particular, deep learning algorithms excel in image recognition and recreation, which can be applied in the seismic fields such as interpolation, de-noising and even inversion \cite{siahkoohi2018seismic, li2019deep}. This section introduces foundational deep learning concepts and three models we used for low-to-high-quality seismic image translation. Generative Adversarial Networks (GANs) advance data generation by leveraging adversarial training to produce realistic samples. The Swin Transformer Convolutional Residual Network (SCRN) and its hybrid variant SCR-GAN further showcase deep learning's image reconstruction capabilities with the aid of vision transformers.
+
+\subsection{Introduction to deep learning}
+This section offers a comprehensive overview of deep learning fundamentals, including Convolutional Neural Networks (CNNs), activation functions, loss functions, learning algorithms, and the model training process. Readers already familiar with deep learning terminology and concepts may proceed directly to Section \ref{subsec:M1}. 
+
+\subsubsection{Convolutional neural networks (CNNs)} 
+Convolutional Neural Networks (CNNs) are a cornerstone of modern deep learning, particularly renowned for their effectiveness in solving complex image-driven pattern recognition tasks and with their precise yet simple architecture \cite{o2015introduction}. CNNs are composed of convolutional layers, pooling layers and linear layers. Pooling layers can be omitted when we perform strided convolution which has the same spatial reduction effect \cite{o2015introduction, alzubaidi2021review}.
+\\\\
+In a convolutional layer, the convolution operation involves sliding a kernel over the input data and computing the dot product between the kernel and the covered input area. When applying a convolution to an input vector $\mathbf{x} \in \mathbf{R}^n$, a convolution layer transforms it into an output vector (also known as the feature map) $\mathbf{y} \in \mathbf{R}^m$. The dimensions of the output vector are determined by several factors: the kernel size $\mathbf{R}^k$, the stride $s$, and the padding $p$. The general formula for calculating the size of the output vector $m$ is \cite{o2015introduction}:
+\begin{equation}
+	m=\left\lfloor\frac{n+2 p-k}{s}\right\rfloor+1
+	\label{eq:cnn}
+\end{equation}
+\noindent where $\left\lfloor\cdot\right\rfloor$ denotes the floor operation. A convolutional layer extracts spatial features, while a linear layer (fully connected layer) combines these features to make final predictions \cite{wu2017introduction}. In a linear layer, the input vector $\mathbf{x} \in \mathbf{R}^n$ is transformed into an output vector $\mathbf{y} \in \mathbf{R}^m$ using the following equation:
+\begin{equation}
+	\mathbf{y}=\mathbf{W} \mathbf{x}+\mathbf{b}
+	\label{eq:linear}
+\end{equation}
+where $\mathbf{W} \in \mathbf{R}^{m \times n}$ is the weight matrix and $\mathbf{b} \in \mathbf{R}^m$ is the bias vector. Understanding these components is crucial for designing and optimising CNN architectures to capture patterns hidden in seismic data. 
+
+\subsubsection{Activation functions}
+Activation functions are essential in CNNs as they introduce non-linearity into the model, enabling it to learn complex patterns \cite{wu2017introduction}. In CNNs, the rectified linear unit (ReLU) and its variants like Leaky ReLU and exponential linear unit (ELU) are typically used after convolutional layers. These activation functions regulate negative values, which is crucial because the subsequent weight could involve negative elements. The equation for each activation function is as follows:
+\begin{equation}
+	\operatorname{ReLU}(x)= \begin{cases}x & \text { if } x \geq 0 \\ 0 & \text { if } x<0\end{cases}
+	\label{eq:relu}
+\end{equation}
+\begin{equation}
+	\text { Leaky } \operatorname{ReLU}(x)= \begin{cases}x & \text { if } x \geq 0 \\ \alpha x & \text { if } x<0\end{cases}
+	\label{eq:leaky_relu}
+\end{equation}
+\begin{equation}
+	\operatorname{ELU}(x)= \begin{cases}x & \text { if } x \geq 0 \\ \alpha\left(e^x-1\right) & \text { if } x<0\end{cases}
+	\label{eq:elu}
+\end{equation}
+\noindent where $\alpha$ is a scaling factor. By using these functions, especially in deep networks, the vanishing gradient problem can be mitigated. Figure \ref{fig:activation_func} illustrates how leaky ReLU and ELU handle negative values differently compared to ReLU. While leaky ReLU and ELU scale negative values and pass them on, ReLU outputs zero. If the weight of a specific layer is negative, ReLU will not propagate the gradient to the next weight.
+\\\\
+Different activation functions are used in the output layer, such as the hyperbolic tangent (tanh) and sigmoid functions. The tanh function outputs values between -1 and 1 (Equation \ref{eq:tanh}), which is suitable for tasks like image generation, while the sigmoid function outputs values between 0 and 1 (Equation \ref{eq:sigm}), often used for binary classification tasks, such as in a discriminator (discussed later in section \ref{subsec:M1}).
+\\
+\begin{minipage}{0.5\textwidth}
+	\begin{equation}
+		f(x)_{\tanh }=\frac{e^x-e^{-x}}{e^x+e^{-x}}
+		\label{eq:tanh}
+	\end{equation}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+	\begin{equation}
+		f(x)_{\text {sigm }}=\frac{1}{1+e^{-x}}
+		\label{eq:sigm}
+	\end{equation}
+\end{minipage}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/theory/activation_func.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Activation Functions: ReLU, Leaky ReLU ($\alpha = 0.2$), and ELU ($\alpha = 1$) on the left; Tanh and Sigmoid on the right.}}
+	\label{fig:activation_func}
+\end{figure}
+
+\subsubsection{Loss functions}
+Loss functions, or criterions, measure the difference between the predicted value generated by the model and the actual values, guiding the model's learning process by quantifying prediction errors. In supervised deep learning (the input training data has labels), tasks fall into two main categories: classification and regression. Classification predicts categorical outcomes, while regression predicts continuous values.
+\\\\
+Our seismic image translation task is a regression problem, where we predict the value of each pixel for a given input. In model training, we utilise Mean Squared Error (MSE) and Mean Absolute Error (MAE) as components of our loss function. MSE penalises larger errors more heavily due to its squaring term (Equation \ref{eq:mse_loss}), making it sensitive to outliers \cite{chen2022novel}. Conversely, MAE is more robust to outliers as it treats all errors linearly (Equation \ref{eq:mae_loss}).
+\\\\
+\begin{minipage}{0.5\textwidth}
+	Mean squared error (MSE):
+	\begin{equation}
+		\mathrm{MSE}=\frac{1}{n} \sum_{i=1}^n\left(y_i-\hat{y}_i\right)^2
+		\label{eq:mse_loss}
+	\end{equation}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+	Mean absolute error (MAE):
+	\begin{equation}
+		\mathrm{MAE}=\frac{1}{n} \sum_{i=1}^n\left|y_i-\hat{y}_i\right|
+		\label{eq:mae_loss}
+	\end{equation}
+\end{minipage}
+\\\\
+Additionally, our model includes a binary classification task, for which we use Binary Cross-Entropy (BCE) or Least Squares Error (LSE) as the criterion. BCE evaluates the model's performance based on the probability values between 0 and 1 (Equation \ref{eq:bce_loss}).  LSE can also be applied by treating class labels as numerical values 0 and 1 (Equation \ref{eq:lse_loss}), however it does not handle the probabilistic nature of classification problems as effectively as BCE.
+\\\\
+\begin{minipage}{0.5\textwidth}
+	Binary cross-entropy (BCE):
+	\begin{equation}
+		\mathrm{BCE}=-\frac{1}{n} \sum_{i=1}^n\left[y_i \log \left(\hat{y}_i\right)+\left(1-y_i\right)\right]
+		\label{eq:bce_loss}
+	\end{equation}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+	Least squares error (LSE):
+	\begin{equation}
+		\mathrm{LSE}=\sum_{i=1}^n\left(y_i-\hat{y}_i\right)^2
+		\label{eq:lse_loss}
+	\end{equation}
+\end{minipage}
+
+\subsubsection{Optimisers}
+Learning algorithms, or optimisers, adjust the weights of a neural network to minimise the loss function by iteratively updating the weights based on gradients computed via back-propagation \cite{shrestha2019review}. Popular optimisers include Adaptive Moment Estimation (Adam) and Root Mean Square Propagation (RMSprop), each offering different strategies to enhance convergence and performance.
+\\\\
+RMSprop (Root Mean Square Propagation) adapts the learning rate for each parameter based on the average of recent magnitudes of the gradients for that parameter. Instead of using the entire history of gradients, RMSprop uses an exponential moving average to keep track of the squared gradients, which is ideal to cope with non-stationary settings and large-scale stochastic optimisation \cite{zou2019sufficient}. 
+\\\\
+Adam combines the ideas of RMSprop to deal with non-stationary objectives and momentum to deal with sparse gradient \cite{kingma2014adam}. It uses moving averages of both the gradients and the squared gradients to adapt the learning rate for each parameter, and includes bias correction terms to account for the initialisation of the moment estimates. Overall, Adam is robust and suitable for non-convex optimisation problems \cite{kingma2014adam}.
+
+
+
+\subsubsection{Training, validation, and testing}
+Machine learning workflows typically consist of three stages: training, validation, and testing. Before training a model, we split the data into a training set, a validation set, and a testing set. The data splitting proportion is detailed in Chapter \ref{subsec: data slicing}. In each epoch, which refers to the one entire passing of the dataset through the algorithm, the model undergoes both training and validation.
+\\\\
+During the training step, the training dataset is fed into the model so it can learn the features and iteratively update its weights. Dropout, a regularisation technique, is applied which randomly disables a fraction of neurons during training to prevent overfitting. After training, the validation set is processed by the model to assess its performance and generalisation to unseen data. If the model uses dropout during training, all neurons are reactivated during this phase.
+\\\\
+After a fixed number of epochs, we analyse the convergence trend and stability of the validation loss, and fine-tune the model's hyper-parameters and architecture. Once the best model is selected, we apply the testing dataset to this final model to unbiasedly evaluate its performance on unseen data.
+
+
+
+
+
+\subsection{Model 1: Generative Adversarial Network (GAN)} \label{subsec:M1}
+Invented by \citeauthor{goodfellow2014generative} in 2014, Generative Adversarial Networks (GANs) represent a powerful class of deep learning models. GANs comprise of two main components: generator(s) ($G$) and discriminator(s) ($D$). They often consist of CNNs \cite{siahkoohi2018seismic}. While $G$ generates synthetic samples from the embedding space, $D$ distinguishes between generated images ($\hat{y}$) and real dataset samples \cite{lau2024}. The training of GANs is an adversarial process where $G$ and $D$ are competing against each other: $G$ tries to fool $D$ by producing increasingly realistic samples, $D$ improvises at distinguishing real samples from synthetic ones. Through the adversarial learning, both $G$ and $D$ evolve by computing the losses and updating model weights through backpropagation (Figure \ref{fig:gan}).
+\\
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/theory/gan.png} % Replace 'example-image' with your image file name
+	\caption{\textit{General GAN architecture (modified from \citeA{saxena2021generative}) on the top; low-to-high-quality seismic image translation GAN architecture at the bottom.}}
+
+	\label{fig:gan}
+\end{figure}
+
+\noindent In the context of low-to-high-quality seismic image translation, our application involves the following steps: 1) Presents MPFI images processed by SLB in-house software Omega, denoted as $x$, to our generator $G$ ; 2) $G$ creates pseudo-TDRI images from $x$, denoted as $\hat{y}$; 3) $D$ assesses whether the given sample is an Omega TDRI image ($y$) or a pseudo-TDRI counterpart ($\hat{y}$), assigning a scalar value between 0 (indicating a reconstructed image) and 1 (indicating a real dataset image); 4) The generator loss ($loss_{G}$) and discriminator loss ($loss_{D}$) are computed based on Equation \ref{eq:g_loss} and \ref{eq:d_loss}; 5) The gradients of these losses are back-propagated to iteratively update the weights of $G$ and $D$ \cite{saxena2021generative}.
+\\
+\begin{equation}
+	\mathrm{Loss_{G}}= \underbrace{\mathrm{Criterion(D(\hat{y}),0)}}_{\text{$G$ performance on fooling $D$}} + \underbrace{\lambda_1 \cdot \mathrm{MSE}(\hat{y}, y) + \lambda_2 \cdot \mathrm{MAE}(\hat{y}, y)}_{\text{$\hat{y}$ resemblance to $y$ in TX domain}} + \underbrace{\lambda_3 \cdot \mathrm{MAE}(\text{fft2}(\hat{y}), \text{fft2}(y))}_{\text{$\hat{y}$ resemblance to $y$ in FK domain}}
+	\label{eq:g_loss}
+\end{equation}
+
+\begin{equation}
+	\mathrm{Loss_{D}}=(\underbrace{\mathrm{Criterion(D(y),1)}}_\text{$D$ performance on classifying real image} + \underbrace{\mathrm{Criterion(D(\hat{y}),0)}}_\text{$D$ performance on classifying synthetic image})/2
+	\label{eq:d_loss}
+\end{equation}
+\\
+
+\noindent $G$ aims to maximise the probability of $D$ being mistaken by generating high resemblance images. This can be achieved by minimising $loss_{G}$, which is computed through a combination of a criterion (BCE or LSE) between $D(\hat{y})$ and 1, MSE and MAE losses between $\hat{y}$ and $y$, as well as the MAE loss between $\hat{y}$ and $y$ in the FK domain (Equation \ref{eq:g_loss}) \cite{kumar2022deep}. The first term measures $\hat{y}$'s ability to confuse $D$, second and third terms quantify the resemblance of $\hat{y}$ and $y$, and the last term ensure frequency consistency in the Fourier domain. In contrast, $D$ aims to correctly classify real and fake samples. This involves minimising the criterion for real samples $D(y)$ and maximising the criterion for generated samples $D(\hat{y})$ \cite{kumar2022deep}.
+
+
+\subsubsection{U-Net Architecture} \label{subsec:unet_archi}
+Introduced in 2015 by \citeauthor{ronneberger2015u}, U-Net is a CNN architecture specifically designed for image segmentation tasks. Its distinctive U-shaped architecture comprises two key segments: the contracting path and the expanding path \cite{ronneberger2015u, long2015fully}. The design's main advantage lies in its ability to capture context and precise localisation, making it effective for learning local features in seismic images.
+\\
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/theory/unet_archi.png} % Replace 'example-image' with your image file name
+	\caption{\textit{U-Net GAN architecture.}}
+	\label{fig:unet_archi}
+\end{figure}
+\noindent In our generator model, which adopts the U-Net architecture, the contracting path commences with a convolutional layer, followed by a series of reduction blocks. The number of these blocks depends on how many are needed to reduce the image height and width to 1. Each reduction block contains four layers: a convolutional layer, batch normalisation, an activation function, and dropout (Figure \ref{fig:unet_archi} left). This configuration aims to decrease the spatial resolution of the input image while simultaneously increasing the number of feature channels. 
+\\\\
+The contracting path is crucial for extracting essential features from the input image. The convolutional layers perform spatial convolutions to detect patterns such as edges and textures. Batch normalisation stabilises and accelerates training by normalising the output of the convolutional layers. The activation function introduces non-linearity, allowing the network to learn complex patterns. Dropout is employed to prevent overfitting by randomly and temporarily turning off some of the neurons during training.
+\\\\
+Conversely, the expanding path in our model consists of multiple expansion blocks and a final layer comprising a transposed convolutional layer and a Tanh function. Each expansion block also consists of four layers: a transposed convolutional layer, batch normalisation, an activation function, and dropout (Figure \ref{fig:unet_archi} right). This part of the network is designed to elevate the spatial resolution of the feature maps. 
+\\\\
+The expanding path's role is to upsample the feature maps, effectively reversing the spatial reduction performed by the contracting path. Transposed convolutional layers perform the upsampling, while batch normalisation, activation functions and dropout are applied similarly to the contracting path. The expanding path also concatenates corresponding feature maps from the contracting path, using skip connections to merge high-resolution features with the upsampled output. This integration of features helps preserve spatial information, crucial for accurate image translation.
+\\\\
+In our discriminator model, we adopt the contracting path of the U-Net architecture. The output from this path is then processed through a flattening layer, transforming the multi-dimensional feature maps into a one-dimensional vector. This vector is subsequently passed through a linear layer, which applies a learned weight matrix to transform the input into the desired output size. Finally, a sigmoid function is applied to limit the scalar value between 0 and 1.
+
+%\subsubsection{Dimensionality in GANs}
+
+\subsection{Introduction to Vision Transformer (ViT)}
+A Transformer is a powerful deep learning architecture introduced by \citeA{vaswani2017attention}. While the features captured by CNNs are small-scale and limited by the size of the convolutional kernels (Equation \ref{eq:cnn}), transformers utilise a self-attention mechanism that enables capturing long-range dependencies \cite{vaswani2017attention}. Early transformers are  designed for natural language processing (NLP) purposes, such as translation and reading comprehension. For detailed information on the original NLP-oriented transformer mechanisms, refer to \citeA{vaswani2017attention}. \citeA{dosovitskiy2020image} introduced Vision Transformers (ViT) for computer vision applications, suitable for our image translation objective. In our models 2 and 3, we employ a special class of ViT, Swin Transformers, which use a shifted windowing scheme to increase efficiency in feature extraction \cite{liu2021swin}. This section will provide the basics of the attention mechanism, ViT, and Swin Transformers.
+
+\subsubsection{What is Attention?}
+In the context of picture-translation application, attention mechanism allows our model to relate different parts of the input image when generating the output picture. Self-attention mechanism calculates the dependencies of different pixels groups using Key (K), Value (V) and Query (Q) vectors, where Q is the information that is being looked for, K is the context or reference, and V is the content that is being searched \cite{nabil2021unpacking}. 
+\\\\
+The self-attention function output is a weighted sum of V, and the weight is a softmax function of Q and K \cite{vaswani2017attention}:
+%\begin{equation}
+%	\text{Attention\_Scores}=\frac{Q K^T}{\sqrt{d_k}}
+%	\label{eq:attention}
+%\end{equation}
+%\noindent where $d_k$ is the dimension of the keys. Next, we obtain the attention weights by applying a softmax function:
+%\begin{equation}
+%	\text{Attention\_Weights}=\text{softmax}(\frac{Q K^T}{\sqrt{d_k}})
+%	\label{eq:weight}
+%\end{equation}
+%\noindent The output of the attention function is the weighted sum of the V:
+\begin{equation}
+	\text{Attention}(Q,K,V)=\text{softmax}(\frac{Q K^T}{\sqrt{d_k}}) V
+	\label{eq:atten}
+\end{equation}
+\noindent Where $d_k$ is the dimension of the keys. Multi-head self-attention extended the self-attention mechanism by using multiple attention heads. Each head performs self-attention (Equation \ref{eq:atten}) independently \cite{vaswani2017attention}: 
+\begin{equation}
+	\text { head }_{\mathrm{i}}=\operatorname{Attention}\left(Q W_i^Q, K W_i^K, V W_i^V\right)
+	\label{eq:head}
+\end{equation}
+\noindent The single head results are concatenated and linearly transformed to produce the final output. 
+\begin{equation}
+	\operatorname{MultiHead}(Q, K, V)=\operatorname{Concat}\left(\text { head }_1, \ldots, \text { head }_{\mathrm{h}}\right) W^O
+	\label{eq:multihead}
+\end{equation}
+\noindent Where the projections are parameter matrices $W_i^Q \in \mathbb{R}^{d_{\text {model }} \times d_k}, W_i^K \in \mathbb{R}^{d_{\text {model }} \times d_k}, W_i^V \in \mathbb{R}^{d_{\text {model }} \times d_v}$ and $W^O \in \mathbb{R}^{h d_v \times d_{\text {model }}}$. By using parallel attention heads, the model is able to capture information from different representation subspaces at various positions efficiently. 
+
+\subsubsection{Vision transformer (ViT)} \label{subsec:vit}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Figure/theory/vit.png} % Replace 'example-image' with your image file name	
+	\caption{\textit{ViT model overview (taken from \citeA{dosovitskiy2020image}).}}
+	\label{fig:vit}
+\end{figure}
+\noindent In NLP, transformers calculate attention between words. In image processing, ViT calculates attention between image patches. Similar to how letters are grouped into words before being fed into a classic transformer, pixels are grouped into patches before being fed into ViT. The ViT flow described by \citeA{dosovitskiy2020image} contains the following steps, also depicted in Figure \ref{fig:vit}:
+\begin{itemize}
+	\item \textbf{Patch embedding:}
+	\\
+	\noindent The image is divided into fixed-size patches, which are flattened into vectors. Each image patch is linearly embedded into a vector of a fixed dimension using a trainable linear projection. Unlike words in a sentence that inherently have positional information, image patches require positional encodings to retain spatial information. These encodings, which can be either learnable parameters or fixed values, are added to the embeddings to indicate the position of each patch in the original image.
+	\item \textbf{Transformer encoder:}
+	\\
+	\noindent The sequence of patch embeddings with positional encodings, is fed into a standard transformer encoder. This encoder has a residual structure starting with a layer normalisation, followed by a multi-head self-attention, another layer normalisation, and a multi-layer perceptron (MLP) (Figure \ref{fig:vit}). Layer normalisation helps stabilise the training process and improve the model's convergence by normalising the inputs across features \cite{xu2019understanding}. The self-attention mechanism enables the model to weigh the importance of each patch relative to others, focusing on important features in the image. After the second layer normalisation, MLP is applied, which consists of hidden layers to further process the features extracted by the self-attention mechanism, enhances the model's capacity to learn complex patterns and relationships. Note that the MLP layers retain only local information while the self-attention layers compute global dependencies \cite{dosovitskiy2020image}. The transformer encoder is repeated multiple times depending on the depth of the architecture.
+	\item \textbf{Output:}
+	\\
+	\noindent In \citeauthor{dosovitskiy2020image}'s model, designed for image classification, an additional learnable classification token is calculated to output classes. For our image translation task, we apply patch un-embedding to convert the flattened positional encoded vector back to the desired output image size.
+\end{itemize}
+
+\subsubsection{Swin Transformer}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{Figure/theory/swin.png} % Replace 'example-image' with your image file name	
+	\caption{\textit{(a) Swin transformer patching with hierarchical feature maps which perform self-attention only within local windows (red boxes); (b) ViT patching (taken from \cite{liu2021swin}).}}
+	\label{fig:swin}
+\end{figure}
+\noindent Swin transformer, proposed by \citeA{liu2021swin}, applies a hierarchical structure on the ViT by starting with small patches and gradually increasing the patch size. In contrast to ViT that applies global self-attention, Swin transformer utilises a shift window-based self attention. Window-based self-attention limits self-attention within a local window at each stage (red boxes in Figure \ref{fig:swin}), reducing the computational complexity. The shifted windows enable the model to capture both local and global pixel dependencies \cite{gao2024swin}. Swin Transformer is designed to be more efficient and scalable, making it better suited for high-resolution images, perfect for our large seismic images.
+
+\subsection{Model 2: Swin Transformer Convolutional Residual Network (SCRN)}
+
+\subsubsection{SCRN Architecture} \label{subsec:scrn_archi}
+The SCRN architecture proposed by \citeauthor{gao2024swin} \citeyear{gao2024swin} consists of multiple feature fusion blocks (FFBs). Each FBB has a CNN module and a ViT module, in which the CNN block extracts local features and the ViT block extract global features. The CNN block excels at extracting local features, capturing the fine details and textures within a small receptive field. Meanwhile, the ViT block is designed to extract global features, allowing the model to consider long-range dependencies across the entire image \cite{dosovitskiy2020image}. The combination of these modules enables the network to learn both local patterns and long-range feature correlations, thereby preserving the continuity of events in seismic data while maintaining high sensitivity to weak signals.
+\\\\
+In the original design, SCRN starts and ends with a 3 x 3 convolution layer, and has 5 FFBs in between. The initial convolutional layer increases the input channel of 1 (for a greyscale seismic image) to 64 channels for later processing. For an input with height and width of 256, the dimension will be modified from [256, 256, 1] to [256, 256, 64]. Conversely, the final convolutional layer reduces 64 channels back to 1 to match the output size [256, 256, 1]. In our experiment, we modified the architecture to 7 and 9 FFBs to cope with more complex real industrial seismic datasets. The detailed architecture is depicted in Figure \ref{fig:scrn_archi}. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/theory/scrn_archi.png} % Replace 'example-image' with your image file name	
+ 	\caption{\textit{SCRN architecture (modified from \citeA{gao2024swin}).}}
+	\label{fig:scrn_archi}
+\end{figure}
+
+\subsubsection{Feature fusion blocks (FFBs)}
+FBBs are connected in three different manners in our experiment. The original design (Figure \ref{fig:scrn_pass} right) is a mirrored residual network (ResNet) where shallow layers have skip connections to deeper layers, allowing the network to learn residual mappings. This architecture takes the advantages of ResNet, which include easier optimisation and avoidance of vanishing or exploding gradients \cite{he2016deep}. The bottleneck design, starting and ending with convolutional layers, facilitates the construction of deeper models without a proportional increase in computational complexity \cite{srinivas2021bottleneck}. The other two connections are ResNet and simple forward pass, which will be discussed in the subsection \ref{subsec:block_config}.
+\\
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Figure/theory/scrn_pass.png}
+	\caption{\textit{FFBs configuration and passing.}}
+	\label{fig:scrn_pass}
+\end{figure}
+
+\noindent Each FBB begins with a 1x1 convolutional layer to learn residual mapping. Its 64 channels are then split into two groups of 32 channels, i.e. [256, 256, 32]. One group is passed to a CNN block for small-scale correlation learning, while the other group is processed by a ViT block to extract long-range pixel relevance. After these parallel processes, the channels are concatenated, combining information extracted at different scales into a single, richer representation. The block concludes with a 3x3 convolutional layer to capture spatial details, followed by another 1x1 convolution layer to restore the original dimensionality \cite{gao2024swin}.
+
+\subsubsection{ViT block: global feature extraction}
+The ViT block in each FBB shares the same structure as mentioned in Section \ref{subsec:vit}, which starts with a layer normalisation, followed by a self-attention block, another layer normalisation, and a multi-layer perceptron (MLP). The self-attention mechanism is the core of the ViT block and we will explain in details next. The MLP consists of a hidden layer of dimension [256, 256, 128] to capture more complex patterns.
+\\\\
+The self-attention block we deployed is a Window-based Multi-Head Self-Attention (W-MSA). Traditional self-attention mechanisms, though powerful, suffer from quadratic complexity with respect to the input size, making them computationally expensive and memory-intensive for large images. W-MSA addresses this challenge by partitioning the input image into smaller, non-overlapping windows and applying self-attention within each window independently, significantly reducing computational needs compared to performing self-attention on the entire feature map \cite{li2021local}.
+\\\\
+The first step in W-MSA is window partition, by dividing the input image of dimension [256, 256, 32] into smaller fixed-size windows of size $8\times8$, the resulting dimension is [($\frac{256}{8}\times\frac{256}{8}$), $8\times8$, 32]. This partitioning reduces computational complexity by focusing attention computations within localised regions, effectively capturing local features. The fully connected layer then projects these input features into a higher-dimensional space, 3-folding our input channels from 32 to 96, generating Query (Q), Key (K), and Value (V) representations essential for calculating attention scores, such that the dimension is [($\frac{256}{8}\times\frac{256}{8}$), $8\times8$, $32\times3$]. Within each window, self-attention scores are computed by measuring the compatibility between queries and keys, determining the importance of each patch relative to others. To incorporate spatial information, relative positional encodings are used, capturing the relationships between patches within a window. Then we split the channels in 3 matrices and changed the dimension to [3, ($\frac{256}{8}\times\frac{256}{8}$), 3, $8\times8$, 32], to match our 3-head attention mechanism. This mechanism operates in parallel, with each head processing different subsets of features to capture diverse relationships. The outputs from all heads are concatenated and linearly transformed. Depending on the W-MSA type, a mask is generated to restrict attention to certain areas, crucial for shifted windows to focus correctly. For this Swin Transformer model, windows are shifted before applying self-attention to capture cross-window interactions, improving feature extraction \cite{liu2021swin}. Finally, window reversal is done by applying a linear projection which transforms the concatenated multi-head attention output into the desired dimension of [256, 256, 32] for further processing \cite{javashs2023scrn}.
+
+\subsubsection{CNN block: local feature extraction}
+The CNN block in this architecture is composed of a sequence of three repeated layers, each containing a 3 x 3 convolution layer, a batch normalisation layer, and a ReLU activation function. Each sequential layer learns increasingly abstract representations, capturing intricate patterns and details from the input data.
+\\\\
+The convolutional layer in the sequence applies filters to input images, detecting local patterns like edges and textures. Using 3x3 kernels with a stride of 1 and padding of 1 maintains spatial dimensions, preserving details. Batch normalisation stabilises training by normalising outputs per mini-batch to zero mean and unit variance, enhancing efficiency and stability. It includes learnable parameters for scaling and shifting outputs. ReLU activation follows, introducing non-linearity by outputting positive values directly and zero for negatives to avoid vanishing gradient.
+\\\\
+By integrating the CNN block into the SCRN architecture, the model is equipped to effectively handle the intricate and large-scale features present in seismic images, facilitating the low-to-high-quality image translation task.
+
+\subsection{Model 3: Swin Transformer Convolutional Residual Generative Adversarial Network (SCR-GAN)}
+\citeA{torbunov2023uvcgan} developed a general-purpose architecture, UVCGAN, to perform image-to-image translation task, leveraging the power of both U-Net GAN and ViT. Similarly, SCR-GAN is a GAN model that incorporates SCRN as the generator (Figure \ref{fig:scrngan_archi}), while preserving the discriminator architecture described in subsection \ref{subsec:unet_archi}. This approach leverages the strengths of SCRN to enhance the generator's performance, particularly boosting the overall seismic features' continuity. The generator architecture is explained previously in subsection \ref{subsec:scrn_archi}. With the aid of the ViT block capturing large-scale features and the CNN block learning regional details, the generator's capability of generating realistic pseudo-TDRI is improved through these advanced feature fusion techniques, while the presence of the discriminator is increasing the robustness of the model.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/theory/scrn_gan.png} % Replace 'example-image' with your image file name
+	\caption{\textit{SCR-GAN architecture.}}
+	\label{fig:scrngan_archi}
+\end{figure}
+
+

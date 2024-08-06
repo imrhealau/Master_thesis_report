@@ -1,0 +1,125 @@
+\subsection{Convolution neural networks (CNNs)} 
+CNNs are composed of convolutional layers, pooling layers and linear layers. Pooling layers can be omitted when we perform strided convolution which has the same spatial reduction effect.
+\cite{o2015introduction} \cite{alzubaidi2021review}
+
+\subsubsection{Convolutional layer}
+The convolution operation involves sliding a kernel over the input data and computing the dot product between the kernel and the covered input area. 
+\\\\
+When applying a convolution to an input vector $\mathbf{x} \in \mathbf{R}^n$, a convolution layer transforms it into an output vector (also known as the feature map) $\mathbf{y} \in \mathbf{R}^m$. The dimensions of the output vector are determined by several factors: the kernel size $\mathbf{R}^k$, the stride $s$, and the padding $p$. The general formula for calculating the size of the output vector $m$ is:
+\begin{equation}
+	m=\left\lfloor\frac{n+2 p-k}{s}\right\rfloor+1
+	\label{eq:cnn}
+\end{equation}
+
+\subsubsection{Linear layer}
+Linear layer (fully connected layers), For an input vector $\mathbf{x} \in \mathbf{R}^n$, a linear layer transforms it into an output vector $\mathbf{y} \in \mathbf{R}^m$ using the following equation:
+\begin{equation}
+	\mathbf{y}=\mathbf{W} \mathbf{x}+\mathbf{b}
+	\label{eq:linear}
+\end{equation}
+
+Where $\mathbf{W} \in \mathbf{R}^{m \times n}$ is the weight matrix and $\mathbf{b} \in \mathbf{R}^m$ is the bias vector.
+
+\subsection{Activation functions}
+Activation functions are essential in CNNs as they introduce non-linearity into the model, enabling it to learn complex patterns. In CNNs, the rectified linear unit (ReLU) and its variants like Leaky ReLU and exponential linear unit (ELU) are typically used after convolutional layers. These activation functions regulate negative values, which is crucial because the subsequent weight could involve negative elements. The equation for each activation function is as followed:
+\\
+\begin{equation}
+	\operatorname{ReLU}(x)= \begin{cases}x & \text { if } x \geq 0 \\ 0 & \text { if } x<0\end{cases}
+	\label{eq:relu}
+\end{equation}
+\\
+\begin{equation}
+	\text { Leaky } \operatorname{ReLU}(x)= \begin{cases}x & \text { if } x \geq 0 \\ \alpha x & \text { if } x<0\end{cases}
+	\label{eq:leaky_relu}
+\end{equation}
+\\
+\begin{equation}
+	\operatorname{ELU}(x)= \begin{cases}x & \text { if } x \geq 0 \\ \alpha\left(e^x-1\right) & \text { if } x<0\end{cases}
+	\label{eq:elu}
+\end{equation}
+\\
+Where $\alpha$ is a scaling factor. By using these functions, especially in deep networks, the vanishing gradient problem can be mitigated. Figure \ref{fig:activation_func} illustrates how leaky ReLU and ELU handle negative values differently compared to ReLU. While leaky ReLU and ELU scale negative values and pass them on, ReLU outputs zero. If the weight of a specific layer is negative, ReLU will not propagate the gradient to the next weight.
+\\\\
+Different activation functions are used in the output layer, such as the hyperbolic tangent (tanh) and sigmoid functions. The tanh function outputs values between -1 and 1 (Equation \ref{eq:tanh}), which is suitable for tasks like image generation, while the sigmoid function outputs values between 0 and 1 (Equation \ref{eq:sigm}), often used for binary classification tasks, such as in a discriminator (discussed later in Chapter \ref{subsec:archi}).
+\\\\
+\begin{minipage}{0.5\textwidth}
+	\begin{equation}
+		f(x)_{\tanh }=\frac{e^x-e^{-x}}{e^x+e^{-x}}
+		\label{eq:tanh}
+	\end{equation}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+	\begin{equation}
+		f(x)_{\text {sigm }}=\frac{1}{1+e^{-x}}
+		\label{eq:sigm}
+	\end{equation}
+\end{minipage}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/theory/activation_func.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Activation Functions: ReLU, Leaky ReLU ($\alpha = 0.2$), and ELU ($\alpha = 1$) on the left; Tanh and Sigmoid on the right}}
+	\label{fig:activation_func}
+\end{figure}
+
+\subsection{Learning algorithms}
+
+\subsubsection{RMSprop}
+RMSprop (Root Mean Square Propagation) adapts the learning rate for each parameter based on the average of recent magnitudes of the gradients for that parameter. Instead of using the entire history of gradients, RMSprop uses an exponential moving average to keep track of the squared gradients. The algorithm is as follow:
+\begin{enumerate}
+	\item Initialize parameters $\theta$, learning rate $\alpha$, and decay rate $\rho$.
+	\item For each iteration $t$:
+	\begin{enumerate}
+		\item Compute the gradient $g_t$ for the current parameters $\theta$.
+		\item Update the moving average of squared gradients: $E[g^2]_t = \rho E[g^2]_{t-1} + (1 - \rho) g_t^2$
+		\item Update the parameters: $\theta = \theta - \frac{\alpha}{\sqrt{E[g^2]_t + \epsilon}} g_t$ , where $\epsilon$ is a small constant to prevent division by zero.
+	\end{enumerate}
+\end{enumerate}
+
+\subsubsection{Adam}
+Adam (Adaptive Moment Estimation) combines the ideas of RMSprop and momentum. It uses moving averages of both the gradients and the squared gradients to adapt the learning rate for each parameter. Adam includes bias correction terms to account for the initialization of the moment estimates, which can be biased towards zero in the initial steps. \cite{kingma2014adam}
+\begin{enumerate}
+	\item Initialize parameters $\theta$, learning rate $\alpha$, exponential decay rates $\beta_1$ and $\beta_2$, and a small constant $\epsilon$. The default setting is $\alpha = 0.001$, $\beta_1 = 0.9$, $\beta_2 = 0.999$, and $\epsilon = 10^{-8}$.
+	\item Initialize moment estimates $m_0 = 0$ and $v_0 = 0$.
+	\item For each iteration $t$:
+	\begin{enumerate}
+		\item Compute the gradient $g_t$ for the current parameters $\theta$.
+		\item Update the biased first moment estimate: $m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t$
+		\item Update the biased second moment estimate: $v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2$
+		\item Compute bias-corrected first moment estimate: $\hat{m}_t = \frac{m_t}{1 - \beta_1^t}$
+		\item Compute bias-corrected second moment estimate: $\hat{v}_t = \frac{v_t}{1 - \beta_2^t}$
+		\item Update the parameters: $\theta = \theta - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t$
+	\end{enumerate}
+\end{enumerate}
+
+
+\subsection{Loss functions}
+Mean squared error (MSE) loss
+
+\begin{equation}
+	\mathrm{MSE}=\frac{1}{n} \sum_{i=1}^n\left(y_i-\hat{y}_i\right)^2
+	\label{eq:mse_loss}
+\end{equation}
+Mean absolute error (MAE) loss
+\begin{equation}
+	\mathrm{MAE}=\frac{1}{n} \sum_{i=1}^n\left|y_i-\hat{y}_i\right|
+	\label{eq:mae_loss}
+\end{equation}
+Binary cross-entropy (BCE) loss
+\begin{equation}
+	\mathrm{BCE}=-\frac{1}{n} \sum_{i=1}^n\left[y_i \log \left(\hat{y}_i\right)+\left(1-y_i\right)\right]
+	\label{eq:bce_loss}
+\end{equation}
+
+\subsection{Training, validation, and testing}
+Machine learning workflows typically consist of three stages: training, validation, and testing. Before training a model, we split the data into a training set, a validation set, and a testing set. The data splitting proportion is detailed in Chapter \ref{subsec: data slicing}. In each epoch, the model undergoes both training and validation.
+\\\\
+During the training step, the training dataset is fed into the model so it can learn the features and iteratively update its weights. After training, the validation set is processed by the model to assess its performance and generalization to unseen data. This validation step is referred to as inference time. If the model uses dropout during training, all neurons are reactivated during this phase.
+\\\\
+After a fixed number of epochs, we analyse the convergence trend and stability of the validation loss, and fine-tune the model's hyper-parameters and architecture. Once the best model is selected, we apply the testing dataset to this final model to unbiasedly evaluate its performance on unseen data.
+
+\section{Vision transformer}
+type here
+\subsection{Patch embedding and un-embedding}
+
+\subsection{Encoder and decoder}

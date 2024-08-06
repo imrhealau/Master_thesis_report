@@ -1,0 +1,336 @@
+\section{Data preparation} 
+In contrast to traditional image translation tasks, where entire images are processed at once, seismic images cover an areal extent of kilometers and contain significantly more pixels and details than a high definition (HD) picture. To handle this complexity, we first visually interpreted the raw seismic volume, extracted slices according to the desired gather, and then created smaller patches of 256 x 256 pixels for our deep learning model to process and learn from. Data preparation is vital for the model to manage and learn from the vast amount of information contained in seismic images.
+
+\subsection{Seismic datasets}
+Acquired in the Gulf of Mexico, our raw 5D seismic volume is collected from a seismic survey conducted using deep-water ocean bottom nodes (OBN) at a depth ranging from 500-1700 meters. 5D refers to time ($t$), source's x-coordinate ($S_{x}$), source's y-coordinate ($S_{y}$), receiver's x-coordinate ($R_{x}$), receiver's y-coordinate ($R_{y}$). The source grid composes of 601 inline points with 50 m spacing and 826 crossline points with 100 m spacing, covering an area of 10300 km$^{2}$. The receiver nodes are deployed in a staggered grid of 1000 m by 1000 m over an an area of 3700 km$^{2}$. The time sampling interval is 12 ms, and we have a total of 500 time samples, which is an equivalent of 6 seconds of data.
+\\\\
+The raw seismic volume was processed using Omega, a geophysical processing software, transforming the raw data into two seismic volumes from a 50x100m grid to a 12.5x12.5m grid using MPFI and TDRI respectively. From these, we extracted two common receiver gathers, resulting in two 3D volumes represented by $t$, $S_{x}$, and $S_{y}$.
+\\\\
+%Next, we performed image augmentation similar to traditional machine learning techniques by applying frequency filters to our broadband data. We used four different frequency filters: 0-5 Hz, 5-10 Hz, 10-25 Hz, and $>$25 Hz (Figure \ref{fig:5freq}). This process increased our dataset size fivefold, as each frequency filter created an additional seismic volume. We will compare the interpolation results from the broadband input including and excluding bandpass frequency duplications in the next chapter.
+%omega, frequency filter
+
+\subsection{Data slicing}
+\label{subsec: data slicing}
+%Seismic volume -> seismic slices -> 256x256 patches -> patches that contain high energy
+%volume trimming, exclude third dim 500 < 256x2
+From each 3D seismic volume, we extracted a total of 601 2D seismic crossline slices (Figure \ref{fig:data_slicing}, left). Crossline slices are chosen as they have larger spacing in the source grid and require higher interpolation rate. Every 2D seismic slice was further divided into patches of size 256 x 256 with a 50\% overlap (Figure \ref{fig:data_slicing}, right). For edge patches, zero padding was applied to maintain the patch size of 256 x 256. In our subsequent experiments, we will exclude the edge patches for training, such that our model can focus on the high energy parts that captured the major events. 10 patches were created from each 2D slice, summing up to a total of 6010 patches for broadband input, or 30050 patches for frequency augmented input. Every MPFI patch was paired up with the TDRI patch extracted at the same location, and they are normalised with respect to the maximum amplitude of the MPFI patch. We randomised the order of these paired patches using a subset random sampler in the data-loader and separated 80\% of them as the training dataset and the remaining 20\% as the validation counterpart. For the testing dataset, we will use patch pairs, including the edge patches, created from a separate seismic volume. 
+\\
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/results/slicing.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Creating patches from a 3D seismic volume.}}
+	\label{fig:data_slicing}
+\end{figure}
+
+\newpage
+\section{Model training and validation}
+All our experiments were performed using NVIDIA A100 80GB Tensor Core GPUs. With up to 1.3 TB of unified memory per node, the A100 80GB GPU was ideal for training large models involving areal seismic volume input \cite{nvidia2020ampere}. We used PyTorch v2.3 as our deep learning framework. More information on the version control can be found in Appendix \ref{ap:data}.
+
+\begin{figure}[ht]
+	\centering
+	\begin{minipage}{.95\linewidth}
+		\begin{algorithm}[H]
+			\caption{GAN and SCRN-GAN training and validation loop} \label{alg:GAN}
+			\KwIn{Epoch $e$, Generator $G$, Discriminator $D$, Criterion \textit{Crit}, SNR function \textit{snr\_func}, Optimisers \textit{optim\_G optim\_D}, Training dataloader $L_{train}$, Validation dataloader $L_{val}$, Learning rate schedulers \textit{sche\_G sche\_D} (optional)}
+			%			$batches \leftarrow \sum_i{ \dfrac{|X_i| \alpha_i}{B_i}}$
+			
+			\For{$epoch \in \{1,\dots,e\}$} 
+			{
+				\For{$x,y \in L_{train}$} 
+				{	
+					{$\nabla\textit{optim\_G} \leftarrow 0$} 
+					
+					{$\nabla\textit{optim\_D} \leftarrow 0$}
+					
+					{$\hat{y}$ $\leftarrow$ {G($x$)}}
+					
+					{fake\_score $\leftarrow$ D($\hat{y}$)}
+					
+					{real\_score $\leftarrow$ D($y$)}
+					
+					{train\_loss\_G $\leftarrow$ \textit{Crit}(fake\_score,0) + 100$\cdot$MAE($\hat{y},y$) + 100$\cdot$MSE($\hat{y},y$) + 100$\cdot$MAE(fft2($\hat{y}$),fft2($y$))}
+					
+					{train\_loss\_D $\leftarrow$ (\textit{Crit}(fake\_score,0)+\textit{Crit}(real\_score,1)) $\div$ 2}
+					
+					{train\_snr $\leftarrow$ \textit{snr\_func}($\hat{y},y$)}
+					
+					{train\_loss\_G.backward()}
+					
+					{train\_loss\_D.backward()}
+					
+					{\textit{optim\_G}.step()}
+					
+					{\textit{optim\_D}.step()}
+					
+				}
+				{\textit{sche\_G}.step()    $\triangleleft$ If present}
+				
+				{\textit{sche\_D}.step()    $\triangleleft$ If present}
+				
+				\For{$x,y \in L_{val}$}
+				{	
+					{$\hat{y}$ $\leftarrow$ {G($x$)}}
+					
+					{fake\_score $\leftarrow$ D($\hat{y}$)}
+					
+					{real\_score $\leftarrow$ D($y$)}
+					
+					{val\_loss\_G $\leftarrow$ \textit{Crit}(fake\_score,0) + 100$\cdot$MAE($\hat{y},y$) + 100$\cdot$MSE($\hat{y},y$) + 100$\cdot$MAE(fft2($\hat{y}$),fft2($y$))}
+					
+					{val\_loss\_D $\leftarrow$ (\textit{Crit}(fake\_score,0)+\textit{Crit}(real\_score,1)) $\div$ 2}
+					
+					{val\_snr $\leftarrow$ \textit{snr\_func}($\hat{y},y$)}
+					
+				}
+			}
+		\end{algorithm}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\begin{minipage}{.95\linewidth}
+		\begin{algorithm}[H]
+			\caption{SCRN training and validation loop} \label{alg:SCRN}
+			\KwIn{Epoch $e$, SCRN Model $M$, SNR function \textit{snr\_func}, Optimiser \textit{optim}, Training dataloader $L_{train}$, Validation dataloader $L_{val}$, Learning rate schedulers \textit{sche} (optional)}
+			%			$batches \leftarrow \sum_i{ \dfrac{|X_i| \alpha_i}{B_i}}$
+			
+			\For{$epoch \in \{1,\dots,e\}$} 
+			{
+				\For{$x,y \in L_{train}$}
+				{	
+					{$\nabla\textit{optim} \leftarrow 0$}
+					
+					{$\hat{y}$ $\leftarrow$ {M($x$)}}
+					
+					{train\_loss $\leftarrow$ 100$\cdot$MAE($\hat{y},y$) + 100$\cdot$MSE($\hat{y},y$) + 100$\cdot$MAE(fft2($\hat{y}$),fft2($y$))}
+					
+					{train\_snr $\leftarrow$ \textit{snr\_func}($\hat{y},y$)}
+					
+					{train\_loss.backward()}
+					
+					{\textit{optim}.step()}
+					
+				}
+				{\textit{sche}.step()  $\triangleleft$ If present}
+				
+				\For{$x,y \in L_{val}$}
+				{	
+					{$\hat{y}$ $\leftarrow$ {M($x$)}}
+					
+					{val\_loss $\leftarrow$ 100$\cdot$MAE($\hat{y},y$) + 100$\cdot$MSE($\hat{y},y$) + 100$\cdot$MAE(fft2($\hat{y}$),fft2($y$))}
+					
+					{val\_snr $\leftarrow$ \textit{snr\_func}($\hat{y},y$)}
+				}
+			}
+		\end{algorithm}
+	\end{minipage}
+\end{figure}
+
+\noindent We followed Algorithm \ref{alg:GAN} for training both GAN and SCRN-GAN models, and Algorithm \ref{alg:SCRN} specifically for SCRN. Training GAN-based models using Algorithm \ref{alg:GAN} was relatively similar to training SCRN models, the main difference was that GAN-based training involved updating the extra weights for the discriminator, resulting in two separate optimisers, losses and schedulers. 
+\\\\
+Our training script involved one outer loop (epoch) and two inner loops (training and validation). Within each epoch, the script iterated over batches of data from the training data-loader, where each batch contained pairs of MPFI ($x$) and TDRI ($y$) patches. The number of pairs determined by the batch size. For each forward pass, it first reset our optimiser(s) gradient to zero. The model then generated pseudo TDRI ($\hat{y}$) patches based on $x$. In case of a GAN-based model, the discriminator evaluated the real $y$ and the generated $\hat{y}$ patches, calculating their resemblance score respectively. Afterwards, it calculated the losses and the SNR, logging these metrics for later analysis. Details of the error quantification metric will be discussed in the next section. The losses were back-propagated and optimisers were updated within the training inner loop. Once all training data was iterated, the learning rate schedulers (if used) were stepped to adjust the learning rates. The validation loop mirrored the training loop but with the model and discriminator set to evaluation mode, deactivating dropout and ensuring all neurons are active. It iterated over batches from the validation data loader, calculating and accumulating validation losses and SNRs in the same manner as in the training loop. 
+\\\\
+Models were saved during training whenever a new highest validation SNR was achieved, as well as at the end of the final epoch. Saved models are used later for the image translation task or as a base model for transfer learning on other seismic applications. Hyper-parameters such as batch sizes, optimisers, and learning rates were carefully selected, with details provided in section \ref{sec:optim}.
+
+\section{Model evaluation metrics}
+The goal of our model is to create realistic pseudo TDRI images from any MPFI input. Achieving satisfactory performance on both the training dataset and unseen validation dataset is crucial to ensure the robustness and generalisability of the model. Throughout the training process, we monitored four primary metrics within each epoch: training loss, validation loss, training Signal-to-Noise Ratio (SNR), and validation SNR. For GAN-based models, we also tracked two additional metrics to evaluate the discriminator's performance: discriminator training loss and discriminator validation loss. These validation metrics were given particular emphasis as they reflected how well the model generalised to cope with unseen data.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Figure/theory/metrics.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Four model performance metrics: Training loss, Validation loss, Training SNR, Validation SNR.}}
+	\label{fig:metrics}
+\end{figure}
+
+\noindent Our discriminator loss, denoted as $\mathrm{Loss_{D}}$, is defined in Equation \ref{eq:d_loss}. To optimise the generator loss $\mathrm{Loss_{G}}$ in Equation \ref{eq:g_loss}, we experimented with different weighting coefficients $\lambda$. Specifically, we tested fixed weight, automatic-weight, and normalised weight. Through these experiments, we determined that the optimal values for the weighting coefficients were $\lambda_1 = \lambda_2 = \lambda_3 = 100$. Consequently, the generator loss function was formulated as follows:
+\begin{equation}
+	\mathrm{Loss_{G}}= \underbrace{\mathrm{Criterion(D(\hat{y}),0)}}_{\text{$G$ performance on fooling $D$}} + \underbrace{100 \cdot \mathrm{MSE}(\hat{y}, y) + 100 \cdot \mathrm{MAE}(\hat{y}, y)}_{\text{$\hat{y}$ resemblance to $y$ in TX domain}} + \underbrace{100 \cdot \mathrm{MAE}(\text{fft2}(\hat{y}), \text{fft2}(y))}_{\text{$\hat{y}$ resemblance to $y$ in FK domain}}
+	\label{eq:g_loss_100}
+\end{equation}
+\\
+Our SCRN loss function operates similarly to the generator loss, but without the criterion term as it does not rely on the discriminator. The SCRN loss function is expressed as:
+\begin{equation}
+	\mathrm{Loss_{M}}= \underbrace{100 \cdot \mathrm{MSE}(\hat{y}, y) + 100 \cdot \mathrm{MAE}(\hat{y}, y)}_{\text{$\hat{y}$ resemblance to $y$ in TX domain}} + \underbrace{100 \cdot \mathrm{MAE}(\text{fft2}(\hat{y}), \text{fft2}(y))}_{\text{$\hat{y}$ resemblance to $y$ in FK domain}}
+	\label{eq:m_loss_100}
+\end{equation}
+\\ 
+The lower $\mathrm{Loss_{G}}$ or $\mathrm{Loss_{M}}$ reached, the better the model performance. This also applies to the training $\mathrm{Loss_{D}}$. However, for the validation $\mathrm{Loss_{D}}$, convergence to a fixed value signifies a balanced state where both the discriminator and generator are learning and challenging each other effectively. Substituting 0.5 for $D(y)$ and $D(\hat{y})$ in Equation \ref{eq:d_loss}, validation $\mathrm{Loss_{D}}$ will reach 0.5 for the least square criterion or 0.7 for the BCE criterion, indicating a well-trained generator in GAN. In addition to the loss metrics, we use SNR to quantitatively evaluate the image translation results. The SNR is calculated using the following equation:
+\begin{equation}
+	\mathrm{SNR}=-20 \cdot \log_{10} \left(\frac{\left\|y-\hat{y}\right\|_F}{\left\|y\right\|_F}\right),
+	\label{eq:snr}
+\end{equation}
+\\
+Here, $F$ denotes the Frobenius norm. The SNR metric provides a measure of the resemblance of the generated image ($\hat{y}$) compared to the real image ($y$), with higher SNR values indicating better performance. By utilising these metrics, we can effectively optimise our model and select the best hyper-parameters, ensuring that the model performs well on both the training and validation datasets.
+
+
+\section{Model optimisation} \label{sec:optim}
+
+\subsection{GAN Hyper-parameters optimisation}
+To optimise our GAN performance, we focused on selecting the best hyper-parameter values that yield the highest SNR and the lowest generator loss for our final model. By systematically changing one hyper-parameter at a time, we evaluated the generator performance using the test values in Table \ref{tab:gan_param} and picked the best option according to the result shown in Figure \ref{fig:gan_param}:
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{cccc}
+		\hline
+		\textbf{Hyper-parameter} & \textbf{Base value} & \textbf{Test values} & \textbf{Best value} \\
+		\hline
+		\textit{Activation function} & ELU($\alpha$=1) & ReLU, leakyReLU($\alpha$=0.2) & ELU($\alpha$=1)\\
+		\textit{Batch size} & 1 & 2, 4 & 2 \\
+		\textit{Feature size} & 8 & 16, 32, 64, 128, 256 & 64 \\
+		\textit{Optimiser} & Adam & RMSprop & Adam \\
+		\textit{Learning rate} & 0.0001 & 0.00001, 0.00003, MultiStepLR, CyclicLR & MultiStepLR \\
+		\textit{Criterion} & LSE loss & BCE loss & LSE loss\\
+		\hline
+	\end{tabular}
+	\caption{\textit{GAN hyper-parameter test values.}}
+	\label{tab:gan_param}
+\end{table}
+
+\begin{enumerate}
+	\item \textbf{Activation functions} ReLU, leaky ReLU and ELU were tested to determine which one best supports the learning process of our GAN, influencing how the network handles non-linearities. Employing ELU as the activation function could reduce validation loss by 4.2\% and enhance 0.8 dB in SNR compared to using ReLU and Leaky ReLU. Note that the occasional instability in the validation metrics is normal due to the stochastic nature of small batch training. Our optimiser adjusts the model weights based on each batch in the training set, not on the validation set. Therefore, fluctuations in validation metrics from epoch to epoch are acceptable as long as the overall trend shows convergence.
+	
+	\item \textbf{Batch size:} Batch sizes of 1, 2 and 4 were experimented with to determine the best size that ensures stable training and efficient gradient estimation. A batch size of 2 brought improvements compared to a batch size of 1, reducing validation loss by 3.4\% and enhancing SNR by 0.2 dB. Batch size of 2 also had more stability than batch size of 4 towards the final epochs. Notably, the choice of a batch size of 2 significantly reduced the training time by 50\% compared to a batch size of 1 (Figure \ref{fig:gan_time}). 
+	
+	\item \textbf{Feature size:} We tested various numbers of features (8, 16, 32, 64, 128, 256) to assess their impact on the performance of our GAN in generating realistic outputs. Notably, feature sizes of 128 and 256 exhibited high fluctuations and instabilities in losses and SNR, particularly on the training set. They also took significantly longer time for model training (Figure \ref{fig:gan_time}) compared to smaller feature sizes. Conversely, smaller sizes (8, 16, 32) resulted in much lower SNR and higher losses. In the final epoch, feature size of 8 reached a validation loss of 232 and SNR of 13 dB, while feature size of 64 resulted a validation loss of 182 and SNR of 15 dB. Therefore, the optimal feature size for stable performance and convergence is determined to be 64.
+	
+	\item \textbf{Optimiser:} We experimented with Adam and RMSprop to find the one that most effectively updates the model's weights, improving convergence speed and stability. They both exhibited similar trend with Adam very slightly outperforming RMSprop in terms of the validation loss (-1\%) and SNR (+0.15 dB).
+	
+	\item \textbf{Learning rate:} Various learning rates were applied to identify the optimal rate at which the model learns, balancing between too fast (risking instability) and too slow (causing slow convergence). We tested a fixed learning rate of 0.0001, 0.00003, and 0.00001. Additionally, we experimented with a multi-step learning rate that reduces by 20\% every 10 epochs, starting from 0.0001. Finally, we applied a cyclical learning rate which increases from base line learning rate 0.00003 to maximum 0.0001 and then decreases back to base rate over the 50 epochs, completing one cycle. With triangular2 mode, the range for the next cycle is half of the previous one, progressively narrowing the oscillation range. While all five learning rates showed similar convergence trend, the multi-step learning rate had the highest stability and the best validation metrics values.
+	
+	\item \textbf{Criterion:} We evaluated LSE loss and BCE loss to find the criterion that best measures the discrepancy between discriminator prediction and the real state, guiding the generator to produce more accurate images. Both loss functions showed similar convergence in terms of SNR and losses. However, in terms of the training stability, LSE loss outperformed BCE loss.
+\end{enumerate}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Figure/results/gan_train_time.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Measurement of the training time taken per epoch for GAN configured with specified hyper-parameters.}}
+	\label{fig:gan_time}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{Figure/results/gan_paramtest.png} % Replace 'example-image' with your image file name
+	\caption{\textit{The effects of hyper-parameters on GAN training and validation. The parameters examined include activation functions (ReLU, Leaky ReLU, and ELU), batch sizes (1, 2, 4), feature sizes (8, 16, 32, 64, 128, 256), optimisers (Adam, RMSprop), learning rates (0.0001, 0.00001, 0.00003, MultiStepLR, CyclicLR), and loss criteria (LSE loss, BCE loss). Each row corresponds to a different hyper-parameter; and each column corresponds to a validation metrics (training losses, validation losses, training SNR, and validation SNR) over 100 epochs.}}
+	\label{fig:gan_param}
+\end{figure}
+
+\noindent After adjusting and testing these hyper-parameters, we identified the optimal configuration for our GAN as follows: using ELU activation function, feature size 64, Adam optimiser, multi-step learning rate scheduling, batch size 2, and LSE loss as the criterion.
+
+
+%\subsection{Dimensionality in GANs}
+%
+%\subsubsection{2D GAN}
+%
+%\subsubsection{Pseudo 3D GAN}
+%
+%\subsubsection{3D GAN}
+
+
+%\section{SCRN experiment}
+%type here
+
+\subsection{SCRN hyper-parameters optimisation}
+By applying the same methods as GAN hyper-parameter values optimisation, we tested and selected the best optimiser, learning rate and batch size for our SCRN (see Table \ref{tab:scrn_param}).
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{cccc}
+		\hline
+		\textbf{Hyper-parameter} & \textbf{Base value} & \textbf{Test values} & \textbf{Best value} \\
+		\hline
+		\textit{Optimiser} & Adam & RMSprop & RMSprop \\
+		\textit{Learning rate} & 0.0002 & 0.00005, 0.0001, MultiStepLR, CyclicLR & MultiStepLR\\
+		\textit{Batch size} & 4 & 1, 2 & 2  \\
+		\hline
+	\end{tabular}
+	\caption{\textit{SCRN hyper-parameter test values.}}
+	\label{tab:scrn_param}
+\end{table}
+
+\begin{enumerate}
+	\item \textbf{Optimiser:} Adam and RMSprop were utilised as learning algorithms in our experiment. Both algorithms demonstrated similar convergence patterns; however, Adam exhibited greater stability throughout the training process. Specifically, RMSprop had a marginal advantage in terms of validation loss and SNR, with a lower validation loss of 0.1\% and an increase in SNR of 0.1 dB over Adam.
+	
+	\item \textbf{Learning rate:} We tested five different learning rates: 0.0003, 0.0001, 0.00005, a multi-step scheduler (starting at 0.0002 and decreasing by 20\% every 10 epochs), and a cyclic learning rate (fluctuating from 0.00005 to 0.0002 over 50 epochs, with the oscillation window narrowing according to the triangular2 mode). The fixed rate of 0.00005 was too small and it resulted higher losses and lower SNR compared to other rates. All learning rates showed good convergence. Notably, the multi-step learning rate achieved the lowest validation loss of 180 and an SNR exceeding 15.5 dB, indicating its effectiveness.
+	
+	\item \textbf{Batch size:} Similar to our approach with GANs, we tested batch sizes of 1, 2, and 4. Batch sizes of 2 and 4 both demonstrated stable convergence. Using a batch size of 4 resulted in the lowest training loss and highest training SNR. However, in the validation metrics, batch size of 2 outperformed, with approximately 0.2 dB better in the validation SNR, suggesting better generalisation and model robustness.
+\end{enumerate}
+
+\noindent After conducting the SCRN hyper-parameter test, we concluded the best model setup is with RMSprop optimiser, multi-step scheduler, and a batch size of 2.
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Figure/results/scrn_train_time.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Measurement of the training time taken per epoch for SCRN configured with specified hyper-parameters.}}
+	\label{fig:scrn_time}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{Figure/results/scrn_param.png} % Replace 'example-image' with your image file name
+	\caption{\textit{The effects of hyper-parameters on SCRN training and validation. The parameters examined include optimisers (Adam, RMSprop), learning rates (0.0001, 0.0002, 0.00005, MultiStepLR, CyclicLR), and batch sizes (1, 2, 4). Each row corresponds to a different hyper-parameter; and each column corresponds to a validation metrics (training losses, validation losses, training SNR, and validation SNR) over 100 epochs.}}
+	\label{fig:scrn_param}
+\end{figure}
+
+\subsection{SCRN Block configuration} \label{subsec:block_config}
+The default SCRN model by \citeA{gao2024swin} has 5 Feature Fusion Blocks (FFBs) connected with Mirrored ResNet. To optimise the SCRN model for our low-to-high resolution seismic image translation purpose, we experimented with adjusting the number of FFBs and block passing strategies to determine the configuration that delivers the most effective performance.
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{cccc}
+		\hline
+		\textbf{Block configuration} & \textbf{Base value} & \textbf{Test values} & \textbf{Best values} \\
+		\hline
+		\textit{Number of FFBs} & 5 & 7, 9, 11 & 11\\
+		\textit{Block passing} & Mirrored ResNet & Forward pass, ResNet & Mirrored ResNet\\
+		\hline
+	\end{tabular}
+	\caption{\textit{SCRN block configuration test values.}}
+	\label{tab:scrn_block_config}
+\end{table}
+
+\begin{enumerate}
+	\item \textbf{Number of FFBs:} We experimented using 5, 7, 9, and 11 FFBs in our SCRN model. Figure \ref{fig:scrn_param2} (first row) shows the more the FFBs, the higher SNR and the lower losses the model can reach, valid for both training and validation metrics. They all showed stability and convergence. In particular, 11 FFBs model reached a high validation SNR of 17 dB, a 1.3 dB improvement compared to the original 5 FFBs model. Indicating our image translation task is more complex and required a deeper network to learn all the necessary features.
+	
+	\item \textbf{Block passing:} We tested simple forward pass, ResNet and Mirrored ResNet for connecting our FFBs. Each passing strategy is detailed in Figure \ref{fig:scrn_pass}. In Figure \ref{fig:scrn_param2} (second row), we can see the simple forward pass performed the best in the validation set for a 5-FFBs model. However, applying on an 11-FFBs model, Mirrored ResNet and ResNet performed better in all metrics. This is because the deeper the network, the smaller the gradients back-propagate, leading to slower learning. ResNet creates shortcut connections and allow gradient flow through the network. Mirrored ResNet marginally outperformed ResNet in our 11-FFBs scenario.
+\end{enumerate}
+
+\noindent After conducting the SCRN block configuration analysis, we concluded the best model setup is with 11 FFBs connected with a Mirrored ResNet. Conducting detailed hyper-parameters analysis for our three models, we have summarised the best set up in Table \ref{tab:model_param}, which will be employed in our model training. 
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{Figure/results/scrn_param2.png} % Replace 'example-image' with your image file name
+	\caption{\textit{The effects of block configuration on SCRN training and validation. The configurations examined include the number of FFBs (5, 7, 9, 11), block passing on 5-FFBs SCRN (Forward pass, ResNet, Mirrored ResNet), and block passing on 11-FFBs SCRN  (Forward pass, ResNet, Mirrored ResNet). Each row corresponds to a different configuration; and each column corresponds to a validation metrics (training losses, validation losses, training SNR, and validation SNR) over 100 epochs.}}
+	\label{fig:scrn_param2}
+\end{figure}
+
+
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{ccccc}
+		\hline
+		& \multicolumn{4}{c}{\textbf{Architecture-based hyper-parameters}}\\
+		\textbf{Model} & \textbf{Activation function} & \textbf{Feature size} & \textbf{No. of FFBs} & \textbf{Block passing}\\ 
+		\hline
+		\textit{GAN} & ELU($\alpha=1$) & 64 & / & /\\
+		\textit{SCRN}& / & / & 11 & Mirrored ResNet\\
+		\textit{SCR-GAN}& ELU($\alpha=1$) & 64 & 11 & Mirrored ResNet\\
+		\hline\hline
+		& \multicolumn{4}{c}{\textbf{Training-based hyper-parameters}}\\
+		\textbf{Model} & \textbf{Batch size} & \textbf{Optimiser} & \textbf{Learning rate} & \textbf{Criterion}\\
+		\hline
+		\textit{GAN} & 2 & Adam & MultiStepLR* & LSE\\
+		\textit{SCRN}& 2 & RMSprop & MultiStepLR' & / \\
+		\textit{SCR-GAN}& 2 & RMSprop & MultiStepLR' & LSE\\
+		\hline
+	    \multicolumn{5}{c}{MultiStepLR*: Learning rate reduced by 20\% every 10 epochs, starting from 0.0001      }\\
+		\multicolumn{5}{c}{MultiStepLR': Learning rate reduced by 20\% every 10 epochs, starting from 0.0002      }\\
+	\end{tabular}
+	\caption{\textit{Final model parameters for GAN, SCRN and SCR-GAN.}}
+	\label{tab:model_param}
+\end{table}
+

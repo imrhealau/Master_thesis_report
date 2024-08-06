@@ -1,0 +1,61 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Scope of study}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Structure of thesis}{4}{section.1.2}%
+\contentsline {chapter}{\numberline {2}Theory}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Seismic processing theory}{5}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Matching pursuit Fourier interpolation (MPFI)}{6}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Time domain Radon interpolation (TDRI)}{8}{subsection.2.1.2}%
+\contentsline {subsubsection}{Discrete Radon Transform (DRT):}{9}{section*.6}%
+\contentsline {subsubsection}{Inverse Discrete Radon Transform (Inverse DRT):}{9}{section*.7}%
+\contentsline {section}{\numberline {2.2}Deep learning theory}{10}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Introduction to deep learning}{11}{subsection.2.2.1}%
+\contentsline {subsubsection}{Convolutional neural networks (CNNs)}{11}{section*.8}%
+\contentsline {subsubsection}{Activation functions}{11}{section*.9}%
+\contentsline {subsubsection}{Loss functions}{12}{section*.11}%
+\contentsline {subsubsection}{Optimisers}{13}{section*.12}%
+\contentsline {subsubsection}{Training, validation, and testing}{13}{section*.13}%
+\contentsline {subsection}{\numberline {2.2.2}Model 1: Generative Adversarial Network (GAN)}{14}{subsection.2.2.2}%
+\contentsline {subsubsection}{U-Net Architecture}{15}{section*.15}%
+\contentsline {subsection}{\numberline {2.2.3}Introduction to Vision Transformer (ViT)}{16}{subsection.2.2.3}%
+\contentsline {subsubsection}{What is Attention?}{17}{section*.17}%
+\contentsline {subsubsection}{Vision transformer (ViT)}{17}{section*.18}%
+\contentsline {subsubsection}{Swin Transformer}{18}{section*.20}%
+\contentsline {subsection}{\numberline {2.2.4}Model 2: Swin Transformer Convolutional Residual Network (SCRN)}{19}{subsection.2.2.4}%
+\contentsline {subsubsection}{SCRN Architecture}{19}{section*.22}%
+\contentsline {subsubsection}{Feature fusion blocks (FFBs)}{19}{section*.24}%
+\contentsline {subsubsection}{ViT block: global feature extraction}{20}{section*.26}%
+\contentsline {subsubsection}{CNN block: local feature extraction}{21}{section*.27}%
+\contentsline {subsection}{\numberline {2.2.5}Model 3: Swin Transformer Convolutional Residual Generative Adversarial Network (SCR-GAN)}{22}{subsection.2.2.5}%
+\contentsline {chapter}{\numberline {3}Methodology}{23}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Data preparation}{23}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Seismic datasets}{23}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Data slicing}{24}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Model training and validation}{25}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Model evaluation metrics}{27}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Model optimisation}{28}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}GAN Hyper-parameters optimisation}{28}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}SCRN hyper-parameters optimisation}{30}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}SCRN Block configuration}{30}{subsection.3.4.3}%
+\contentsline {chapter}{\numberline {4}Results}{36}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Model performance in terms of evaluation metrics}{36}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Image translation results}{37}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Global result evaluation}{38}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Regional result evaluation}{39}{subsection.4.2.2}%
+\contentsline {chapter}{\numberline {5}Discussion}{45}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Comparison of GAN, SCRN and SCR-GAN}{45}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Computational time improvement}{45}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Limitations}{46}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Garbage in, garbage out}{46}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Limited data, limited generalisation}{47}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}Future research}{47}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Improvement on the SCRN model}{47}{subsection.5.4.1}%
+\contentsline {subsubsection}{Weighting key traces during model training}{47}{section*.55}%
+\contentsline {subsubsection}{Expanding the training data with common receiver gathers}{48}{section*.56}%
+\contentsline {subsubsection}{Increasing dataset variety through frequency augmentation}{48}{section*.57}%
+\contentsline {subsection}{\numberline {5.4.2}Low-to-high-quality seismic image translation on other applications}{49}{subsection.5.4.2}%
+\contentsline {chapter}{\numberline {6}Conclusion}{51}{chapter.6}%
+\contentsline {chapter}{\numberline {A}Appendix}{52}{chapter.1}%
+\contentsline {section}{\numberline {A.1}Data management plan}{52}{section.1.1}%
+\contentsline {section}{\numberline {A.2}Model architecture}{52}{section.1.2}%
+\contentsline {chapter}{Bibliography}{53}{figure.caption.63}%
+\contentsline {section}{References}{53}{section*.64}%

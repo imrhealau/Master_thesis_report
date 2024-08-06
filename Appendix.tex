@@ -1,0 +1,23 @@
+\chapter{Appendix}
+\section{Data management plan} \label{ap:data}
+The MPFI and TDRI datasets used in this study were provided by SLB and are confidential. The datasets are obtained using Omega, a SLB in-house processing software, on a standard 20 core 125GB memory CPU node. Both the datasets and code are managed under version control using Azure DevOps. Deep learning was performed using PyTorch (v2.3.1) and Python (v3.11.7) on hardware equipped with an NVIDIA A100-SXM4-80GB GPU, with CUDA version 12.2 and driver version 535.161.08.
+
+\section{Model architecture}  \label{ap:ap}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/theory/gan_sum.jpg} % Replace 'example-image' with your image file name
+	\caption{\textit{Generator architecture and parameters for an input size of [2,1,256,256], where 2 is the batch size, 1 is the number of channel (greyscale), 256 is the image width and height.}}
+	\label{fig:gan_sum}
+\end{figure}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/theory/scrn_sum.jpg} % Replace 'example-image' with your image file name
+	\caption{\textit{SCRN (11-FFBs) architecture and parameters for an input size of [2,1,256,256], where 2 is the batch size, 1 is the number of channel (greyscale), 256 is the image width and height.}}
+	\label{fig:scrn_sum}
+\end{figure}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/theory/dis_sum.jpg} % Replace 'example-image' with your image file name
+	\caption{\textit{Discriminator architecture and parameters for an input size of [2,1,256,256], where 2 is the batch size, 1 is the number of channel (greyscale), 256 is the image width and height.}}
+	\label{fig:dis_sum}
+\end{figure}

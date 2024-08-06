@@ -1,0 +1,143 @@
+
+\documentclass{report}
+
+
+%Marginie interlinea
+\usepackage[top=1in, bottom=1in, left=1.2in, right=1in]{geometry}
+\pagestyle{plain}
+\linespread{1.3}
+
+%Librerie utili
+\usepackage[utf8]{inputenc}
+\usepackage{libertine}
+\usepackage{graphicx}
+\usepackage{floatflt}
+\usepackage{blindtext}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{subfig}
+\usepackage{listings}
+\usepackage{listingsutf8}
+\usepackage{amsmath}
+\usepackage{framed}
+\usepackage{minibox}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{longtable}
+\usepackage[strict]{changepage}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\pgfplotsset{width=11cm,compat=1.9}
+\usepgfplotslibrary{external}
+\tikzexternalize
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{caption}
+\usepackage{subfigure}
+\usepackage{sectsty}
+\usepackage{titling} 
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0.0, 0.4, 0.0}
+\usepackage[Sonny]{fncychap}
+\usepackage{lipsum}
+\usepackage{apacite}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{algpseudocode}
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+\usepackage{pdflscape}
+\usepackage{graphicx}
+\usepackage{multicol}
+%\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+
+\begin{document}
+\title{GAN}
+\author{Ying Ting (Rhea) Lau}
+\date{\today}
+
+\begin{titlepage}
+
+\begin{center}
+\textsc{ \LARGE{Joint Master's in Applied Geophysics\\}}
+\vspace{10mm}
+\includegraphics[width=0.3\textwidth]{Figure/front_page/IDEA_League_Logo.png}
+\vspace{5mm}\\
+\textsc{ \large{Delft University of Technology, The Netherlands\\ }}
+\textsc{ \large{ETH Zürich, Switzerland\\ }}
+\textsc{ \large{RWTH Aachen, Germany\\ }}
+\vspace{25mm}
+\textnormal{ \LARGE{Master Thesis\\}}
+\vspace{5mm}
+% \fontsize{10mm}{7mm}\selectfont 
+% \textup{Generative Adversarial Networks on Traces Interpolation}\\
+\textnormal{\huge{Low-to-high-quality \\ seismic image translation using deep learning\\}}
+\vspace{5mm}
+\textnormal{\large{written by\\}}
+\textnormal{\Large{Ying Ting (Rhea) Lau\\}}
+\vspace{25mm}
+\setlength{\columnsep}{500pt}
+\begin{tabular}{cccc}
+\textbf{\large{External Supervisors}} & & & \textbf{\large{Internal Supervisor}} \\
+\textbf{\large{from SLB UK}} & & & \textbf{\large{from ETH Zürich}} \\\\
+\large{Dr. Rajiv Kumar} & & & \large{Dr. Dirk-Jan van Manen} \\
+\large{Dr. Massimiliano Vassallo} &  \\
+\end{tabular}
+\end{center}
+
+\vspace{20mm}
+
+\centering{\large{Academic year 2023/2024 \\ \today}}
+\end{titlepage}
+
+\chapter*{Abstract}\label{ch:0}
+\thispagestyle{empty}
+\input{Abstract}
+
+\chapter*{Acknowledgements}\label{ch:acknowledegement}
+\input{Acknowledgement}
+
+\tableofcontents
+\thispagestyle{empty}
+\clearpage 
+\setcounter{page}{1} % Reset page number to 1
+
+\chapter{Introduction}\label{ch:intro}
+\input{Introduction}
+%
+\chapter{Theory}\label{ch:seis}
+%%\chapter{Seismic processing technologies}\label{ch:seis}
+\input{Seismic}
+%%\chapter{Machine learning tools}\label{ch:dl}
+\input{Theory}
+%
+%
+%% Seismic data challenges
+%% MPFI, TDRI intro
+%
+\chapter{Methodology}\label{ch:exp}
+\input{Experiment}
+
+\chapter{Results}\label{ch:result}
+\input{Result}
+%
+\chapter{Discussion}\label{ch:discussion}
+\input{Discussion}
+%
+\chapter{Conclusion}\label{ch:conclusion}
+\input{Conclusion}
+
+
+
+\appendix
+\input{Appendix}
+
+\newpage
+\bibliographystyle{apacite}
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliography{bibliography.bib}
+\end{document}

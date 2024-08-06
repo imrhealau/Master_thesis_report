@@ -1,0 +1,179 @@
+In this chapter, we present the MPFI-to-Pseudo-TDRI image translation results using our GAN, SCRN, and SCR-GAN models. The hyper-parameters selected for each model are summarised in Table \ref{tab:model_param}. Ideally, the pseudo TDRI image generated should closely match its ground truth TDRI image. However, achieving perfect reconstruction is challenging due to finite computational resources. Even with infinite training epochs, the model might overfit the training set and fail to generalise to unseen validation and test data. Consequently, we limited the number of epochs for each model to 100, at which point the evaluation metrics (SNR and loss in training and validation dataset) showed stagnation in improvement. The figures presented in the model comparison Section \ref{sec:val} are based on the test set, which was another common receiver gather extracted from the same seismic volume. 
+
+\section{Model performance in terms of evaluation metrics}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/results/model_snr.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Training loss, validation loss, training SNR and validation SNR over 100 epochs with GAN, SCRN, and SCR-GAN model.}}
+	\label{fig:model_snr}
+\end{figure}
+
+\noindent In Figure \ref{fig:model_snr}, we can clearly see the performance differentiates between the GAN and SCRN-based models. SCRN-based models exhibit a faster convergence trend, particularly in the validation metrics, with the slope of metrics levelling out around the 70th epoch.  Table \ref{tab:loss} shows that SCRN-based models have 14\% lower training loss, 5\% lower validation loss, and 8\% lower test loss compared to GAN. In terms of SNR, SCRN-based models outperform GAN by more than 1 dB in SNR for both the training and test sets. When comparing SCRN and SCR-GAN, SCRN very slightly leads by an average of 0.5\% across all metrics. Additionally, Figure \ref{fig:model_snr}, indicates that SCR-GAN has less stability in the validation metrics compared to SCRN.
+\\\\
+Based on both quantitative metrics and qualitative analysis from the plots, SCRN is the best model. It demonstrates the lowest losses and highest SNR across training, validation, and test sets. SCRN-based models exhibit superior performance, faster convergence, and greater stability compared to GAN.
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{ccccccc}
+		\hline
+		& \multicolumn{2}{c}{\textbf{Training set}} & \multicolumn{2}{c}{\textbf{Validation set}} & \multicolumn{2}{c}{\textbf{Test set}} \\
+		\textbf{Model} & \textbf{Loss} & \textbf{SNR [dB]} & \textbf{Loss} & \textbf{SNR [dB]} & \textbf{Loss} & \textbf{SNR [dB]}\\
+		\hline
+		\textit{GAN} & 172.35 & 16.02 & 159.99 & 16.92 & 180.33 & 15.19\\
+		\textit{SCRN} & 147.69 & 17.45 & 151.65 & 17.29 & 165.33 & 16.32\\
+		\textit{SCR-GAN} & 148.47 & 17.39 & 152.26 & 17.23 & 168.45 & 16.25\\
+		\hline
+	\end{tabular}
+	\caption{\textit{Model performance on training, validation, and test sets in terms of normalised loss and SNR. For the GAN-based model, the loss here refers to the generator loss. The training and validation metrics are based on the final epoch, while the test metrics are evaluated on the fully trained model.}}
+	\label{tab:loss}
+\end{table}
+
+
+\section{Image translation results} \label{sec:val}
+While the losses and SNR metrics indicate the image translation ability on individual patches, it is important to assess the overall 2D slice translation results. In seismic interpretation, the focus is on the signals across the entire 2D slice rather than on small 256 x 256 patches. This holistic view of seismic slices offer a comprehensive representation of large-scale subsurface structures and stratigraphy, enabling geophysicists to interpret geological features, fault lines, and other critical subsurface anomalies. Therefore, we group the patches processed by the models back into slices, ensuring 50\% overlap in both x and y directions (Figure \ref{fig:regroup}). Overlapping patches can maintains signal continuity and reduces edge effects, resulting in a smoother transition between patches and a more coherent reconstruction of the 2D slice. In this section, we will analyse the image translation results for unseen MPFI slices taken from another common receiver gather, evaluating their pseudo-TDRI reconstruction by comparing them to the target TDRI values globally and regionally.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Figure/results/regroup.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Regrouping the translated 256 x 256 patches into a 2D slice with 50\% overlapping.}}
+	\label{fig:regroup}
+\end{figure}
+
+\subsection{Global result evaluation}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/results/pair_input.png} % Replace 'example-image' with your image file name
+	\caption{\textit{2D seismic slices in the TX domain: The MPFI slice (top left) serves as the input, the TDRI slice (top middle) is the reference, and the difference between MPFI and TDRI slices (top right). 2D seismic slices in the FK domain: The MPFI slice (bottom left), the TDRI slice (bottom middle), and the difference between MPFI and TDRI slices (bottom right). The yellow cone represents the region where our signal exists, while the red boxes indicate areas where noises can appear in the spectrum.}}
+	\label{fig:pair_input}
+\end{figure}
+
+\noindent Before evaluating the quality of the reconstructed images, it is essential to understand the input MPFI slice and the target TDRI slice. As an industry-standard interpolator, MPFI produces results that, while not achieving the same quality as the high-cost TDRI solution, are nevertheless close (see Figure \ref{fig:pair_input}). In the FK domain, the two curved events in the TX domain are represented by a range of dips, appearing as large dispersive cones in both the MPFI and TDRI slices, highlighted in yellow in Figure \ref{fig:pair_input}. Even at the large scale shown in Figure \ref{fig:pair_input}, we can appreciate that the MPFI slice contains significant inherent noises (see red boxes), such as symmetrical cones at lower frequencies due to aliasing and high-frequency artifacts on both sides of the main signal, are not suppressed from the interpolation process. Conversely, TDRI proves to be a superior interpolation method, effectively eliminating these noises and leaving only minimal traces at negative wavenumbers. Ideally, anything outside the main signal cone should have zero amplitude, constrained by the compressional wave speed in water at 1450 m/s. However, these noises outside the main signal cone are not a primary concern as they can be easily removed using dip-dependent filters in seismic processing. In the following discussion, we will focus on residuals within the cone region.\\
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/results/pair_pseudo.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Reconstructed slices in the TX domain: Pseudo TDRI slices produced by GAN (top left), by SCRN (top middle), and by SCR-GAN (top right). Reconstructed slices in the FK domain: Pseudo TDRI slices produced by GAN (bottom left), by SCRN (bottom middle), and by SCR-GAN (bottom right).}}
+	\label{fig:pair_output}
+\end{figure}
+
+\noindent Figure \ref{fig:pair_output} displays the image translation results in both domains. All three models reconstructed high resemblance TDRI image. However, the GAN model introduced a slight artifact, resulting as a bluish hue between distances of 4-6 km shown in the TX domain. In contrast, both SCRN-based models produced a background that was paler than the TDRI reference in TX domain (see Figure \ref{fig:pair_input}(top)), suggesting that these models not only retained the reflection signals but also effectively performed de-noising.\\
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/results/pair_diff.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Residual in the TX domain: Difference between the ground truth TDRI slice and the pseudo TDRI slices produced by GAN (top left), by SCRN (top middle), and by SCR-GAN (top right). Residual in the FK domain: Difference between the ground truth TDRI slice and the pseudo TDRI slices produced by GAN (bottom left), by SCRN (bottom middle), and by SCR-GAN (bottom right). Note that the amplitude range is reduced by 80\% to better visualise the low amplitude residuals.}}
+	\label{fig:pair_diff}
+\end{figure}
+
+\noindent Since all reconstructions display clear texture and event continuity, we next evaluate model performance based on residuals. Figure \ref{fig:pair_diff} illustrates the differences between the pseudo-TDRI slices and the ground truth. 
+Note that the amplitude range is smaller than that of the previous plot to emphasise the residuals. In the TX domain, the GAN model exhibits the highest residuals, concentrated around the two main events. SCRN and SCR-GAN also show residuals at these locations, but with lower amplitude. The presence of residuals could be attributed to the limited coverage in our training data (see Figure \ref{fig:data_slicing}), which may have prevented the models from learning events beyond t=4.6s. However, most residuals are observed before this time, suggesting that our models effectively captured the essence of seismic traces and generalised well to unseen parts of the image. The blue hue shown in the GAN residual background is an ultra-low frequency artifact (indicated with an arrow in Figure \ref{fig:pair_diff}). Moving on to the FK domain, we see that the pseudo-TDRI slice generated by GAN shows significant residuals (highlighted in red boxes in Figure \ref{fig:pair_diff}), which match the dip of the primary energy signal (yellow band in Figure \ref{fig:pair_output}), indicating the presence of spatial aliasing. This artifact partially overlaps with our signal cone (wavenumber -0.02 to 0.02 [1/m]), which might cause distortion. On the other hand, the SCRN-based models removed a noise band (orange boxes in Figure \ref{fig:pair_diff}) that is present in the original TDRI slice (red box in Figure \ref{fig:pair_input}(bottom middle)), once again proving their noise reduction capabilities.
+
+\subsection{Regional result evaluation}
+\noindent  A more detailed analysis of the results in smaller patches allows a better understanding of the image translation performance. To further differentiate the quality between SCRN and SCR-GAN reconstructions, we analyse the residuals in patches that capture the strongest events. Figure \ref{fig:diff_patches} presents the residuals and SNR for each patch, the first row of  displays patches produced by GAN. Patch (a) is an edge patch with noticeable smearing noises in pink, while center patches, particularly (d), exhibit a red hue, indicating that GAN introduced a substantial noise in that area during reconstruction. These patches show an SNR that is 2 units lower than those produced by the SCRN-based models. In contrast, SCRN and SCR-GAN generated nearly identical images (second and third row in Figure \ref{fig:diff_patches}), with SCRN performing slightly better, averaging +0.1 dB SNR. Their residual is less coherent than GAN. The key differences are observed in patches (c) and (d), where SCR-GAN has higher residuals from the second event, with SNRs of -0.4 dB and -0.2 dB compared to SCRN. This suggests that SCR-GAN shares the same weakness as GAN in reconstructing regions with the highest amplitude.\\
+
+\begin{landscape}
+	\begin{figure}[ht]
+		\centering
+		\includegraphics[height=\textwidth]{Figure/results/diff_patches.png} % Replace 'example-image' with your image file name
+		\caption{\textit{Difference between the TDRI patches (ground truth) and the pseudo-TDRI patches generated by GAN (top row), SCRN (middle row), and SCR-GAN (bottom row). The six patches in each row are extracted from t=1.9-3.8s and x=0-10.33km, as depicted by the red box in the bottom right slice. The unit of SNR here is in dB. The colour limits (amplitude range) are set from -1 to 1 to highlight the residual.}}
+		\label{fig:diff_patches}
+	\end{figure}
+\end{landscape}
+
+\noindent Next, we perform a regional analysis along the main signal in both domains. In Figure \ref{fig:slices}, the two major events are divided into three segments of equal distance (3.44 km), each featuring 2 seconds of data. On the MPFI slices, noticeable ripple-like noise appears in the TX domain, particularly in the near offset, leading to additional noise emerging within the signal cone area in the FK domain. The TDRI slices exhibit coherence in the signal but include more texture below the main reflection. These low-amplitude cross-mark texture in the TX domain may indicate either noise or signal. The pseudo-TDRI patches generated by all three models show a high degree of similarity to the target TDRI values in both the TX and FK domains. In the TX domain, these reconstructions are smoother, particularly below the main signal, where some texture is lost compared to TDRI. In the FK domain, the de-noising effect is evident as the areas outside the main signal band approach zero, resulting in less noise compared to the ground truth TDRI.\\
+
+\noindent The residual plot in Figure \ref{fig:slice_diff} shows that the MPFI-TDRI difference in the TX domain contains ripple-like noise, which is effectively eliminated in all pseudo-TDRI residuals. Recovering the very evident coherent seismic events that was lost in MPFI in the Figure \ref{fig:slice_diff}(first column) is the biggest achievement of our deep learning models. At the first location (Figure \ref{fig:slice_diff}(top row)), cross marks are evident in the bottom right corners of the reconstructed TDRI residual patches. Among the models, GAN exhibits the highest residual amplitude, a pattern consistent across other locations. GAN TDRI residuals are also less coherent than those of the other models. In the TX domain, residuals from all three models still display remnants of the signal curve, indicating that some signal has been removed along with the noise. In the FK domain, residuals within the signal cone (wavenumber -0.02 to 0.02 [1/m]) suggest partial signal removal. GAN shows the strongest residual amplitude in this domain as well. Additionally, artifacts from aliasing, highlighted in red boxes in Figure \ref{fig:pair_diff}, are further localised in the near offset plot. Each model exhibits slight differences in performance based on residual amount at various locations. GAN has the highest residual at the first location but the lowest at the third. SCRN and SCR-GAN perform similarly, with nearly identical residuals. Overall, despite small level of signal removal, we appreciate the model performance in terms of the reduction of the alias and noises within the MPFI the signal cone.
+
+\begin{figure}[!ht]
+	\centering
+	\subfigure[Slices in the TX domain]{\includegraphics[width=0.9\textwidth]{Figure/results/grey_slices.png}}\\
+	\subfigure[Slices in the FK domain]{\includegraphics[width=0.9\textwidth]{Figure/results/blue_slices.png}}
+	\caption{MPFI patches, TDRI patches, Pseudo TDRI patches generate by GAN, SCRN and SCR-GAN (left to right) featuring different time-distance ranges in TX domain and the FK domain. The ranges from top to bottom are: t=3-5s, x=0-3.44km; t=1.75-3.75s, x=3.44-6.88km; t=3-5s, x=6.88-10.33km. }
+	\label{fig:slices}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+	\subfigure[Residual in the TX domain]{\includegraphics[width=0.67\textwidth]{Figure/results/grey_diff.png}}\\
+	\subfigure[Residual in the FK domain]{\includegraphics[width=0.67\textwidth]{Figure/results/blue_diff.png}}
+	\caption{MPFI-TDRI difference, Pseudo TDRI-TDRI difference reconstructed by GAN, SCRN and SCR-GAN (left to right) featuring different time-distance ranges in TX domain and the FK domain. The ranges from top to bottom are: t=3-5s, x=0-3.44km; t=1.75-3.75s, x=3.44-6.88km; t=3-5s, x=6.88-10.33km.}
+	\label{fig:slice_diff}
+\end{figure}
+%
+%\subsection{Comparison in TX domain}
+%Figure \ref{fig:tdri_tx} displays the image translation results and the TDRI target value for comparison. All three models reconstructed high resemblance TDRI image. However, the GAN model introduced a slight artifact, resulting as a bluish hue between distances of 10-20 km. In contrast, both SCRN-based models produced a background that was paler than the TDRI ground truth, suggesting that these models not only retained the reflection signals but also effectively performed denoising.
+%
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width=\textwidth]{Figure/results/tdri_tx_3.png} % Replace 'example-image' with your image file name
+%	\caption{\textit{2D seismic slices in the TX domain: The MPFI slice (top) serves as the input, the TDRI slice (middle left) is the reference, the pseudo-TDRI slice generated by GAN (middle right), the pseudo-TDRI slice generated by SCRN (bottom left), and the pseudo-TDRI slice generated by SCR-GAN (bottom right). The colour limits (amplitude range) are set from -3 to 3.}}
+%	\label{fig:tdri_tx}
+%\end{figure}
+%
+%\noindent Since all reconstructions display clear texture and event continuity, we next evaluate model performance based on residuals. Figure \ref{fig:diff_patches} illustrates the differences between the pseudo-TDRI slices and the ground truth. The GAN model exhibits the highest residuals, concentrated around the two main events. SCRN and SCR-GAN also show residuals at these locations, but with lower amplitude. The presence of residuals could be attributed to the limited coverage in our training data (see Figure \ref{fig:data_slicing}), which may have prevented the models from learning events beyond t=4.6s. However, most residuals are observed before this time, suggesting that our models effectively captured the essence of seismic traces and generalised well to unseen parts of the image.
+%
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width=\textwidth]{Figure/results/tdri_diff_tx.png} % Replace 'example-image' with your image file name
+%	\caption{\textit{The difference between the pseudo-TDRI slices generated by GAN (left), SCRN (middle), and SCR-GAN (bottom) and the reference TDRI slice in the TX domain. The colour limits (amplitude range) are set from -3 to 3. The red line marks t = 4.6s, which the training dataset doesn't cover beyond that time.}}
+%	\label{fig:tdri_diff_tx}
+%\end{figure}
+%
+%\noindent To further differentiate the image translation quality between SCRN and SCR-GAN, we analyse the residuals in patches that capture the main events. Figure \ref{fig:diff_patches} presents the residuals and SNR for each patch, with the amplitude range adjusted to highlight the residuals. The first row of Figure \ref{fig:diff_patches} displays patches produced by GAN. Patch (a) is an edge patch with noticeable smearing noises in pink, while center patches, particularly (d), exhibit a red hue, indicating that GAN introduced a substantial noise in that area during reconstruction. These patches show an SNR that is 2 units lower than those produced by the SCRN-based models. In contrast, SCRN and SCR-GAN generated nearly identical images (second and third row in Figure \ref{fig:diff_patches}), with SCRN performing slightly better, averaging +0.1 SNR. The key differences are observed in patches (c) and (d), where SCR-GAN has higher residuals from the second event, with SNRs of -0.4 and -0.2 compared to SCRN. This suggests that SCR-GAN shares the same weakness as GAN in reconstructing regions with the highest amplitude.
+%\\\\
+%\noindent Another comparison involves examining MPFI and TDRI slices. The model performance is at its best when its MPFI and pseudo TDRI difference is identical to the MPFI-TDRI difference. As shown in Figure \ref{fig:mpfi_diff_tx}, all models exhibit a strong resemblance to the target value. However, GANs slightly underperform as it introduced noises in the same region described earlier, which affects their ability to accurately reconstruct textures in high-amplitude areas (see red box in Figure \ref{fig:mpfi_diff_tx}). 
+%\\\\
+%In conclusion, SCRN and SCR-GAN outperform GAN in terms of reconstruction quality, with SCRN slightly leading in the overall performance.
+%
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width=\textwidth]{Figure/results/mpfi_diff_tx.png} % Replace 'example-image' with your image file name
+%	\caption{\textit{The difference between the MPFI input slice and the TDRI reference slice (top left), the pseudo-TDRI slices generated by GAN (top right), SCRN (bottom left), and SCR-GAN (bottom right) in the TX domain. The red box highlights the artifacts that GAN produced. }}
+%	\label{fig:mpfi_diff_tx}
+%\end{figure}
+%
+%\subsection{Comparison in FK domain}
+%In the FK domain, the two curved events in the TX domain are mapped into a range of dips, represented by the large cones in every slice of Figure \ref{fig:tdri_diff_fk}. As indicated by the red boxes in Figure \ref{fig:tdri_diff_fk}, the MPFI slice exhibits significant inherent noise, such as symmetrical cones at lower frequencies due to aliasing and high-frequency artifacts on both sides of the main signal. In contrast, TDRI proves to be a superior interpolation method compared to MPFI, as it effectively removes these noises, leaving only a minor trace of noise at negative wavenumbers (see red box in Figure \ref{fig:tdri_diff_fk}).  Ideally, anything outside the main signal cone should have zero amplitude, constrained by the compressional wave speed in water at 1450 m/s. The pseudo-TDRI reconstructions from our three models excel at eliminating noise from the MPFI input and accurately translating it to the TDRI input, with no noticeable residual noise.
+%\\\\
+%In Figure \ref{fig:mpfi_diff_fk}, we compare the MPFI and (pseudo-)TDRI slices by examining their differences. The target TDRI slice shows minimal signal removal, as evidenced by the near absence of residuals in the central cone area where the main signal is located (Figure \ref{fig:mpfi_diff_fk}, top left). All our models have removed some portion of the signal, resulting in residuals in the central region. Notably, the GAN removed the most energy from the major reflection, followed by SCR-GAN and SCRN (see red boxes in Figure \ref{fig:mpfi_diff_fk}.
+%\\\\
+%To further compare the results from the three deep learning models, we examine the differences between the reconstructed images and the ground truth. With a much smaller amplitude range plot, we can see that the pseudo-TDRI slice generated by GAN shows significant residuals (highlighted in red boxes in Figure \ref{fig:tdri_diff_fk}), which match the dip of the primary energy signal (yellow band in Figure \ref{fig:tdri_diff_fk}), indicating the presence of spatial aliasing. Conversely, the SCRN-based model, as shown in the orange boxes in Figure \ref{fig:tdri_diff_fk}, effectively eliminates the noise present in the ground truth TDRI, once again proving its noise reduction capabilities.
+%\\\\
+%
+%
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width=\textwidth]{Figure/results/tdri_fk.png} % Replace 'example-image' with your image file name
+%	\caption{\textit{2D seismic slices in the FK domain: The MPFI slice (top) serves as the input, the TDRI slice (middle left) is the reference, the pseudo-TDRI slice generated by GAN (middle right), the pseudo-TDRI slice generated by SCRN (bottom left), and the pseudo-TDRI slice generated by SCR-GAN (bottom right). The colour limits (amplitude range) are set from 0 to 4400. Red boxes show area with noises.}}
+%	\label{fig:tdri_fk}
+%\end{figure}
+%
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width=\textwidth]{Figure/results/tdri_diff_fk.png} % Replace 'example-image' with your image file name
+%	\caption{\textit{The difference between the pseudo-TDRI slices generated by GAN (left), SCRN (middle), and SCR-GAN (bottom) and the reference TDRI slice in the TX domain. The colour limits (amplitude range) are set from 0 to 180 to highlight the residual. Red boxes indicate area of spatial aliasing and orange boxes shows the noises removed from TDRI.}}
+%	\label{fig:tdri_diff_fk}
+%\end{figure}
+%
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width=\textwidth]{Figure/results/mpfi_diff_fk.png} % Replace 'example-image' with your image file name
+%	\caption{\textit{The difference between the MPFI input slice and the TDRI reference slice (top left), the pseudo-TDRI slices generated by GAN (top right), SCRN (bottom left), and SCR-GAN (bottom right) in the FK domain. The colour limits (amplitude range) are set from 0 to 1700. Red boxes indicates the residual from the major signal.}}
+%	\label{fig:mpfi_diff_fk}
+%\end{figure}
+%
+%
+
+
+
+
+% Seismic data Applications
+
+%\subsection{MPFI-TDRI interpolation}
+%Type here
+
+%\subsection{Ground roll removal}
+%Type here
+%
+%\subsection{Deconvolution**}
+%Type here

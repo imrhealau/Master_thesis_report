@@ -1,0 +1,186 @@
+\section{Seismic processing theory}
+In order to reconstruct the seismic signal from the samples collected in the field, it is ideal to follow the Nyquist criterion \cite{shannon1949communication}, which states that the sampling rate $f_s$ must be at least twice the highest frequency $f_{max}$ present in the signal, i.e. $f_s \geq 2f_{max}$. If the criterion is met, we can reconstruct the original band-limited continuous-time signal $x(t)$ from the samples $x(nT)$ using Whittaker-Kotelnikov-Shannon (WKS) theorem  \cite{shannon1949communication}:
+\begin{equation}
+	x(t)=\sum_{n=-\infty}^{\infty} x(n T) \cdot \operatorname{sinc}\left(\frac{t-n T}{T}\right)
+\end{equation}
+\noindent Where $T$ is the sampling period ( $T=\frac{1}{f_s}$ ), $f_s$ is the sampling frequency, and  $\operatorname{sinc}(x)=\frac{\sin (\pi x)}{\pi x}$ is the sinc function. If the Nyquist criterion is not met, frequencies higher than $f_s/2$ (the Nyquist frequency) will alias into in the base bandwidth (the range from 0 Hz to $f_s/2$). These higher frequencies will appear as if they are lower frequencies within the base bandwidth, and they may overlap with the original signal components (see Figure \ref{fig:freq}(d)). This results in high-frequency components being misinterpreted as lower frequencies, leading to distortion in the reconstructed signal \cite{oppenheim1999discrete}. 
+\\
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{Figure/theory/freq.png} 
+	\caption{\textit{Effect in the frequency domain of sampling in the time domain, where $\Omega_S$ denotes the sampling frequency and $\Omega_N$ is the Nyquist frequency. (a) Spectrum of the original signal. (b) Spectrum of the sampling function. (c) Spectrum of the sampled signal with $\Omega_S>2 \Omega_N$, no aliasing occurs. (d) Spectrum of the sampled signal with $\Omega_S<2 \Omega_N$, aliasing occurs. Illustration taken from \citeA{oppenheim1999discrete}.}}
+	\label{fig:freq}
+\end{figure}
+
+\noindent Seismic data are typically irregularly and sparsely collected in spatial sense due to finite surveying and time resources \cite{schonewille2013matching}. Therefore, interpolation is necessary to accurately reconstruct the original signal and address aliasing issues. Before processing the dataset, we require an interpolation method for filling gaps in the raw data to ensure data continuity and correcting acquisition artifacts to prepare data in a regular grid \cite{claerbout1976fundamentals}. The ideal interpolation technique should prioritise speed and affordability while maintaining good accuracy. This section discusses two SLB in-house interpolators, matching pursuit Fourier interpolation (MPFI) and time domain Radon interpolation (TDRI).  
+
+\subsection{Matching pursuit Fourier interpolation (MPFI)}
+Matching Pursuit Fourier Interpolation (MPFI) is a method used in signal processing to reconstruct signals in the wavenumber domain. "Fourier" in MPFI refers to the use of Fourier transform-based basis functions, specifically the non-uniform discrete Fourier transform (NDFT) given by Equation \ref{eq:dft} \cite{bagchi1996nonuniform,xu2005antileakage}. MPFI integrates principles from Matching Pursuit, the signal to be interpolated is modelled as the sum of a finite number of complex sinusoids, selected from a large and redundant dictionary. MPFI iteratively calculates the wavenumber, amplitude and phase of such sinusoids to best match the data at the every iteration, approximating the overall spectrum. The process described by \citeauthor{schonewille2013matching} is as follows:\\
+\noindent \textbf{Initialisation:}
+\begin{enumerate}
+	\item Estimate the FX spectrum $S(f,x)$ of the original irregularly sampled signal $s(t,x)$ using Fast Fourier transform (FFT). $S(f,x)$ could be decomposed into a sum of basis functions:
+	\begin{equation}
+		S(f,x)=\sum_{i=1} A_i e^{j\left(\varphi_i+k_i x\right)}
+	\end{equation}
+	\item  Set the residual $S_{\text{res}}$ as the transformed original signal $S$ itself and the interpolated signal $S_{int}$ to 0.
+\end{enumerate}
+\textbf{For each iteration $i$:}\\
+\noindent MPFI looks for three parameters: amplitude $A_i$, phase $\varphi_i$ and wavenumber $k_i$, by identifying the basis function $\text{BF}_i(A_i,\varphi_i,k_i)=A_i e^{j\left(k_i x+\varphi_i\right)}$ that best match $S_{\text{res}}$ at the current iteration. The cost function to minimise the difference is:
+\begin{equation}
+	\left[A_i, \varphi_i, k_i\right]=\min _{A_i, \varphi_i, k_i}[C F]=\min _{A_i, \varphi_i, k_i}\left[\sum_n\left\|S_{\text{res}}(x_n)-\underbrace{A_i e^{j\left(\varphi_i+k_i x_n\right)}}_{\text{Basis function}}_\right\|^2\right]
+	\label{eq:cf}
+\end{equation}
+\noindent and can be solved linearly for the amplitude and phase as a function of wavenumber:
+\begin{equation}
+	A_i\left(k_i\right) e^{-j\left(\varphi_i\left(k_i\right)\right)}=\frac{1}{X} \sum_{n=1}^{N_X} S_{\text{res}}\left(x_n\right) e^{-j\left(k_i x_n\right)} \Delta x_n
+	\label{eq:dft}
+\end{equation}
+\noindent where \(X\) is the total distance in the \(x\) direction, \(N_x\) is the total number of measurements in the \(x\) direction, and \(\Delta x_n\) is the spacing at sample number \(n\). This simplifies the cost function to vary solely with the wavenumber parameter:
+
+\begin{equation}
+	\left[k_i\right]=\min _{k_i}[C F]=\min _{k_i}\left[\sum_n\left\|S_{\text{res}}\left(x_n\right)-A_i\left(k_i\right) e^{j\left(\varphi_i\left(k_i\right)+k_i x_n\right)}\right\|^2\right]
+	\label{eq:kcf}
+\end{equation}
+\begin{enumerate}
+	\item Equation \ref{eq:kcf} is calculated for every wavenumber $k_i$ in the dictionary. This results in a representation of the spectrum of the residual in the wavenumber domain.
+	\item The basis function with the optimal $k_i$ that give the smallest residual is selected, which is the one that correspond to the maximum amplitude of the spectrum. This process may involve differentiating between aliased replicas using prior knowledge.
+	\item This basis function describe a component of our estimated wavefield and can be added to the output at a generic position x:
+	\begin{equation}
+		S_{\text{int}}(x)=\sum_{i} A_i e^{j\left(\varphi_i+k_i x\right)}=S_{\text{int},i-1}(x)+A_i e^{j\left(\varphi_i+k_i x\right)}
+		\label{eq:s_int}
+	\end{equation}
+	\item The basis function is then subtracted from the residual $S_{\text{res}}= S_{\text{res},i-1}-\mathrm{BF}_i(A_i,\varphi_i,k_i)$.
+	
+	
+%	\item Since \(A\) and \(\varphi\) are functions of \(k\), we can determine the wavenumber \(k_i\) corresponding to the maximum energy component in \(\mathrm{BF}_i\) using the optimal coefficients \(A_i\) and \(\varphi_i\) found in step 1. This process may involve differentiating between aliased replicas using prior knowledge. As we lack an analytic expression to resolve Equation \ref{eq:kcf}, we calculate the cost function (CF) for every \(k\) along the wavenumber axis (a large and redundant dictionary of \(k\) values), selecting the one that gives the minimum residual. This \(k_i\) will have the highest amplitude \(A(k_i)\). The wavenumber \(k_i\) can be identified by minimising the energy of the residual \(S_{\text{res}}\) using the simplified cost function \(\mathrm{CF}\) given by:
+%	\begin{equation}
+%		\left[k_i\right]=\min _{k_i}[C F]=\min _{k_i}\left[\sum_n\left\|S_{\text{res}}\left(x_n\right)-A_i\left(k_i\right) e^{j\left(\varphi_i\left(k_i\right)+k_i x_n\right)}\right\|^2\right]
+%		\label{eq:kcf}
+%	\end{equation}
+%	\item The Inverse NDFT of the set of basis functions is the sum of all the iterated basis functions evaluated at x. Add the selected basis function $\mathrm{BF}_i(A_i,\varphi_i,k_i)$ as part of the the cumulative spectrum $S_{int}$, i.e. 
+%	\begin{equation}
+%		S_{int}=\sum^{i}A_i e^{j\left(k_i x+\varphi_i\right)}
+%	\end{equation}
+%	\item Subtract the transformed component from the residual by $S_{\text{res}} = S_{\text{res}}-\mathrm{BF}_i(A_i,\varphi_i,k_i)$.
+\end{enumerate}
+\noindent\textbf{Convergence:} 
+\begin{enumerate}
+	\item Continue the iterative process until $S_{\text{res}}$ is sufficiently small or a predefined number of iterations is reached. The final interpolated signal (total spectrum) $S_{\text{int}}$ is the sum of all selected basis functions (high energy spectral components) obtained repeatedly by Equation \ref{eq:s_int}.
+	\item Transform the $S_{\text{int}}$ back to the TX domain using inverse FFT.
+\end{enumerate}
+%\textbf{Initialisation:}
+%\begin{enumerate}
+%	\item Estimate the FX spectrum $S(f,x)$ of the original irregularly sampled signal $s(t,x)$ using Fast Fourier transform (FFT).
+%	\item  Set the residual $S_{\text{res}}$ as the transformed original signal $S$ itself and the interpolated signal $S_i$ to 0.
+%\end{enumerate}
+%\textbf{For each iteration $i$:}
+%\begin{enumerate}
+%	\item Determine the basis function $\mathrm{BF}(k,A,\phi)$ for every wavenumber $k$, including the amplitude $A$ and phase $\phi$, that best represent $S_{\text{res}}$  using NDFT by:
+%	$$A_i*exp(j\phi_i)=\frac{1}{\sum \Delta x}\cdot \sum_{m=0}^{M-1}s(x)\exp(j(k_nx_m))\Delta x_m$$
+%	\item Find the wavenumber $k_i$ that corresponds to the maximum energy component in $\mathrm{BF}$. This may involve distinguishing among aliased replicas using prior knowledge. $k_i$ can be identified by minimising the cost function $\mathrm{CF}$ given by: 
+%	\begin{equation}
+%		\mathrm{CF}=\left\|S_{\text{res}}-A_i\exp(i k_i x + \phi_i))\right\|^2
+%		\label{eq:cf}
+%	\end{equation}
+%	\item Add the selected basis function $\mathrm{BF}_i(k_i,A_i,\phi_i)$ as part of the the cumulative spectrum $S_i$, \\i.e. $S_i = \sum^i\mathrm{BF}_i(k_i,A_i,\phi_i)$.
+%	\item Subtract the transformed component from the residual by $S_{\text{res}} = S_{\text{res}}-\mathrm{BF}_i(k_i,A_i,\phi_i)$.
+%\end{enumerate}
+%\noindent\textbf{Convergence:} 
+%\begin{enumerate}
+%	\item Continue the iterative process until $S_{\text{res}}$ is sufficiently small or a predefined number of iterations is reached. The final interpolated signal (total spectrum) $S_i$ is the sum of all selected basis functions (high energy spectral components) obtained repeatedly by step 2.
+%	\item Transform the $S_i$ back to the TX domain by Equation \ref{eq:idft}.
+%\end{enumerate}
+
+% \cite{wang2007seismic}.  \\\\
+%\cite{proakis2007digital,Wapenaar2014}
+%\subsubsection{Non-uniform Discrete Fourier transform (NDFT):} % non uniform dft
+%\begin{equation}
+%	\begin{gathered}
+%	A_i*exp(j\phi_i)=\frac{1}{\sum \Delta x}\cdot \sum_{m=0}^{M-1}s(x)\exp(j(k_nx_m))\Delta x_m
+%	\end{gathered}
+%	\label{eq:dft}
+%\end{equation}
+%\noindent here $\frac{\Delta x_m}{\sum \Delta x}$ is the data weight 
+%\noindent Here the sequence $x[n]$ of length $N$, $z_0, z_1, \cdots, z_{N-1}$ are distinct points located arbitrarily on the time or space axis, depepnding upon if we are applying NDFT along temporal or spatial axis. We can express Equation \ref{eq:dft} in a matrix form as:
+%\begin{equation}
+%	\mathbf{X}=\mathbf{D} \mathbf{x} 
+%\end{equation}
+%
+%where $\mathbf{X}=\left[\begin{array}{c}X\left(z_0\right) \\ X\left(z_1\right) \\ \vdots \\ X\left(z_{N-1}\right)\end{array}\right]$, $\mathbf{x}=\left[\begin{array}{c}x[0] \\ x[1] \\ \vdots \\ x[N-1]\end{array}\right]$, and $\mathbf{D}=\left[\begin{array}{ccccc}1 & z_0^{-1} & z_0^{-2} & \cdots & z_0^{-(N-1)} \\ 1 & z_1^{-1} & z_1^{-2} & \cdots & z_1^{-(N-1)} \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & z_{N-1}^{-1} & z_{N-1}^{-2} & \cdots & z_{N-1}^{-(N-1)}\end{array}\right]$.
+%\subsubsection{Inverse Discrete Fourier transform (Inverse NDFT):}
+%\begin{equation}
+%	\mathbf{x}=\mathbf{D}^{-1} \mathbf{X} 
+%	\label{eq:idft}
+%\end{equation}
+
+\noindent MPFI models the signal as a summation of Fourier components, thus performing spatial interpolation in the wavenumber domain. This method is not only dependent on the sparseness of the original signal in the FK domain, but also incorporating any available prior information in the FK domain, such as a more densely sampled secondary dataset for better reconstruction of dipping events or a prior derived from lower frequencies in the same dataset to de-alias higher frequencies \cite{schonewille2013matching}. These priors assist in distinguishing the primary energy component from its aliased replicas along the wavenumber axis.
+\\\\
+While MPFI offers affordability and computational efficiency, it has limited robustness in reconstructing steeply dipping and low-amplitude events, due to several theoretical factors rooted in the nature of seismic data and the methods employed. First, seismic data is primarily collected in TX domain, where low-amplitude signals (e.g. reflections, refractions and diffractions) are overlaid by the high-amplitude, low-frequency dispersive noises (e.g. ground roll and guided waves). These low-amplitude signals may be inadequately represented when NDFT is applied \cite{bilsby2023multistage}. In high dynamic range situations, MPFI can generate artifacts due to its focus on matching the strongest events, which can distort weaker signals. Even with optimal interpolation, some errors are unavoidable. If these errors are small compared to a very strong event, they may still overshadow weaker underlying signals. 
+\\\\
+Moreover, the irregular sampling of seismic data can lead to spectral leakage, where energy from desired signals spreads into adjacent frequency bins with DFT, further complicating accurate reconstruction. Perfect interpolation in FK domain is impossible for data overlapping condition \cite{soubaras1997spatial}. For instance the overlaying signals in Figure \ref{fig:domain}(b) cannot be reconstructed in numerical perfection by the basic MPFI algorithm, and more advanced algorithms or more complex workflows may be needed. While modern technologies can interpolate these three linear events with high accuracy, real field seismic data presents far greater complexity.
+\\\\
+Another factor is the effectiveness of MPFI heavily relies on the assumption of signal sparsity in the FK domain \cite{xu2010antileakage}. If the original signal does not exhibit significant sparsity or if the prior information about the signal structure is not sufficiently accurate, MPFI may struggle to accurately identify and reconstruct the relevant components from the noisy data. This limitation becomes more pronounced when dealing with complex geological structures or signal-to-noise ratios are inherently low.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/theory/domain.png} 
+	\caption{\textit{Illustration of synthetic traces with missing data in (a) TX domain, (b) FK domain, (c) $\tau p$ domain, and (d) the interpolated traces using TDRI. The orange arrows mark overlapping data in the FK domain (taken from \citeA{schonewille2014comparison}).}}
+	\label{fig:domain}
+\end{figure}
+
+\subsection{Time domain Radon interpolation (TDRI)}
+Serving a similar functionality as MPFI, Time domain Radon interpolation (TDRI) also operates as an iterative solver but relies on sparsity in the zero-offset intercept time/ dip ($\tau p$) domain. $\tau$ is the intercept time obtained by projecting the slope back to x = 0, and $p$ is the horizonal ray parameter, also known as the slowness, $p=\frac{1}{c}$ for a 2D vector where $c$ is the velocity \cite{diebold1981traveltime}. While in 3D space, the slowness $p$ only considers the horizontal projection of the vector. This domain can be considered an intermediary between the time-space (TX) and frequency-space (FX) domains, as it involves a combination of linear moveout corrections and stacking with various slownesses. $\tau p$ transform is a tool used to isolate linear events in seismic data by transforming the data from the TX domain to the $\tau p$ domain by Equation \ref{eq:radon} \cite{beylkin1987discrete}. A coherent seismic event, such as a reflection, will have a consistent moveout pattern across multiple traces. By integrating along the lines of constant moveout defined by 
+$t=\tau+px$, the slant stack maps the distributed energy of seismic events in the TX domain into concentrated points in the $\tau p$ domain (see Figure \ref{fig:domain}(c)). This transformation allows for the separation of signals based on their dip, which is particularly useful for dealing with complex subsurface structures. By applying linear moveout corrections, TDRI aligns seismic events of different dips, effectively enhancing signal coherence and suppressing noise.
+\subsubsection{Discrete Radon Transform (DRT):}
+\noindent Let a seismogram $u(t, x)$ contain $2 L+1$ traces, i.e., we have $u\left(t, x_l\right)$, where $l=0, \pm 1, \cdots, \pm L$. Assuming that $x_{-L}<x_{-L+1}<\cdots<x_{L-1}<x_L$, the DRT equation is given by \citeA{beylkin1987discrete} is:
+\begin{equation}
+	(R u)(\tau, p)=\sum_{l=-L}^{l-L} u\left(\tau+p x_l, x_l\right) \Delta x_l
+	\label{eq:radon}
+\end{equation}
+\noindent where $\Delta x_l=\left(x_{l+1}-x_{l-1}\right) / 2$ for $l=0, \pm 1, \cdots, \pm(L$ $-1)$, and $\Delta x_L=x_L-x_{L-1}, \Delta x_{-L}=x_{-L+1}-x_{-L}$. 
+\\
+\subsubsection{Inverse Discrete Radon Transform (Inverse DRT):} %time derivative of hilbert transform RSP lt4
+\noindent Given the vector sequence $y(n)$ (DRT of $x(n)$), we compute the following \cite{beylkin1987discrete}.
+\begin{enumerate}
+\item The adjoint transform of $y(n)$ by using $z(n)=\sum_{m=-M}^{m-M} R_{-m}^* y(n+m)$ to obtain $z(n), n=0, \cdots, N-1$.
+\item The Fast Fourier Transform (FFT) of $z(n)$.
+\item A solution to a linear $(2 L+1) \times(2 L+1)$ system:
+$$\hat{z}(k)=\hat{H}(k) \hat{x}(k),$$
+for $k=0,1, \cdots, N-1$, where $\hat{z}(k)$ and $\hat{x}(k)$ are DFT's of $z(n)$ and $x(n)$, and $\hat{x}(k)$ is a computational matrix (refer to \citeA{beylkin1987discrete} for more details), for $k=k_{\min }, \cdots, k_{\max }(\operatorname{det} \hat{H}(k) \neq 0$ ) to obtain $\hat{x}(k)$. We set $\hat{x}(k)=0$ outside the frequency band, i.e., for $k=0, \cdots, k_{\min }-1$ and $k=k_{\max }+1, \cdots, N / 2$.
+\item Inverse FFT of $\hat{x}(k)$ to obtain $x(n)$.
+\end{enumerate}
+\noindent If (2) holds for all $k=0, \cdots, N / 2$, then the DRT is invertible for all frequencies.
+\\\\
+The iterative approach of TDRI involves repeatedly adjusting the model to minimise the difference between the observed and predicted data, same as the approach used in MPFI. However, TDRI's reliance on the $\tau p$ domain enables it to more effectively reconstruct seismic data, particularly when dealing with very sparsely sampled datasets. This is because the seismic wavelet's energy is compact in time and spreads across frequencies, such that the signal often appears as sparse, concentrated in a narrow range of $\tau$ values and specific dip, making it easier to distinguish from noise than in the frequency domain. The process described by \citeA{wang2010seismic} is as follows:
+\\\\
+\textbf{Initialisation:} Set the residual $s_{\text{res}}(t,x)$ as the transformed original signal $s(t,x)$ itself and the interpolated signal $s_i$ to 0.
+\\
+\noindent \textbf{For each iteration $i$:}
+\begin{enumerate}
+%	\item Estimate the Radon domain spectrum $\tilde{m}^{i}$ of the residual using Equation \ref{eq:radon}.
+	\item Determine the basis function $\mathrm{BF}(\tau,p)$ for every zero-offset intercept time $\tau$ and dip $p$ that best represent $s_{\text{res}}$.
+%	\item Choose a relevant model subspace $m_i$ based on the amplitude threshold of the Radon spectrum $\tilde{m}^{i}$.
+	\item Find the $\tau_i$ and $p_i$ that corresponds to the maximum energy component in $\mathrm{BF}$. The $\tau_i,p_i$ can be identified by minimising the cost function $\mathrm{CF}$ using the conjugate gradient (CG) algorithm: 
+	\begin{equation}
+		\mathrm{CF}=\left\|s_{\text{res}}-\mathrm{Randon}^{-1}(\mathrm{BF}(\tau_i,p_i)))\right\|^2
+		\label{eq:cf2}
+	\end{equation}
+	\item Add the selected basis function $\mathrm{BF}_i(\tau_i,p_i)$ as part of the the cumulative spectrum $S_i$, \\i.e. $S_i = \sum^i\mathrm{BF}_i(\tau_i,p_i)$.
+	\item Subtract the transformed component from the residual by $s_{\text{res}} = s_{\text{res}}-\mathrm{Randon}^{-1}(\mathrm{BF}(\tau_i,p_i))$.
+\end{enumerate}
+\noindent\textbf{Convergence:} Continue the iterative process until $s_{\text{res}}$ is sufficiently small or a predefined number of iterations is reached. The final interpolated signal (total spectrum) $s_i$ is the sum of all selected basis functions (high energy spectral components) obtained repeatedly by step 2.
+\\\\
+TDRI is a more powerful interpolator than MPFI, giving better reconstruction for very sparsely sampled data and overlapping events \cite{schlumberger2016}. TDRI overcomes the limitation of MPFI in reconstructing overlapping signals by utilising a significantly larger number of measurements per unknown coefficient \cite{schonewille2014comparison}. This increased measurement density in TDRI enhances the ability to isolate and accurately reconstruct signals that may be obscured or mixed together with noises, such that precise reconstructions are possible for complex structure even when the available data is limited \cite{gu2009radon}. However, this increased performance comes at a significantly higher computational cost.
+The higher computational cost of TDRI compared to MPFI arises because TDRI's basis functions scan a higher-dimensional space, iterating in the two-dimensional $\tau p$ domain, whereas MPFI iterates along the one-dimensional $k_x$ domain for each frequency and excluding the frequency from the inversion process. As noted in our introduction, processing our Gulf of Mexico dataset using TDRI required 9,792 times more CPU time compared to using MPFI. As the substantial computational expense of TDRI is heavily dependent on the maximum processing frequency, it is recommended to apply frequency filtering to the input data, utilising TDRI for the lower frequency components while reserving the higher frequency components for MPFI \cite{schlumberger2016}. By strategically dividing the frequency spectrum for TDRI (low frequencies) and MPFI (high frequencies) respectively, we can achieve a cost-effective solution that maintains high-quality interpolation results from TDRI at an acceptable cost. Similarly, the objective of this thesis is to explore how deep learning can overcome the computational cost of TDRI while maintaining its high quality.
+
+
+
+%\subsection{Marine data example}
+
+
+%
+%\section{Deconvolution**}
+%
+%\subsection{Up-Down Deconvolution (UDD)}
+%
+%\subsection{Multi-Dimensional Deconvolution (MDD)}

@@ -1,0 +1,129 @@
+
+\section{Comparison of GAN, SCRN and SCR-GAN}
+Based on our evaluation metrics and slice reconstruction performance, SCRN stands out as the most effective model. SCRN-based models deliver a higher SNR than GANs because they excel in signal retention while performing de-noising. This advantage is evident in Figure \ref{fig:pair_input}, where SCRN-based pseudo TDRI slices exhibit less background noise compared to the ground truth, which is unexpected since our model aims to replicate the ground truth. This suggests that SCRN's de-noising capability might even surpass that of the TDRI.
+\\\\
+Conversely, GAN introduce significant low-frequency noise ($<$1Hz) into the reconstructed images, as illustrated in Figure \ref{fig:slice_diff} and the histogram in Figure \ref{fig:freqhist}. All three models show greater discrepancies from the ground truth TDRI at higher frequencies compared to lower frequencies (Figure \ref{fig:freqhist}), leading to some residuals at key seismic event positions. We plan to address this issue by employing transfer learning—loading the trained model and continuing training with a dataset that emphasises high frequencies (see Section \ref{subsec:freqaug} for more details). Nonetheless, SCRN consistently translates images with the least residuals across all frequencies, establishing it as the most robust and accurate model among the three.
+
+%
+%\begin{figure}[ht]
+%	\centering
+%	\begin{subfigure}
+%		\centering
+%		\includegraphics[width=0.8\textwidth]{Figure/results/freq.png} % Replace 'example-image' with your image file name
+%		\caption{\textit{Image reconstruction residual per frequency bins.}}
+%		\label{fig:freqhist}
+%	\end{subfigure}
+%	\vspace{0.5cm}  % Adjust vertical space between images
+%	\begin{subfigure}
+%		\centering
+%		\includegraphics[width=0.8\textwidth]{Figure/results/ampfreq.png} % Replace 'example-image' with your image file name
+%		\caption{\textit{Amplitude of slices per frequency bins.}}
+%		\label{fig:amphist}
+%	\end{subfigure}
+%\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Figure/results/freq.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Image reconstruction residual per frequency bins.}}
+	\label{fig:freqhist}
+\end{figure}
+
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width=0.8\textwidth]{Figure/results/ampfreq.png} % Replace 'example-image' with your image file name
+%	\caption{\textit{Amplitude of slices per frequency bins.}}
+%	\label{fig:amphist}
+%\end{figure}
+
+\section{Computational time improvement}
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{cccc}
+		\hline
+		\textbf{Model} & \textbf{Model training time} & \textbf{Image translation time} & \textbf{Total time (excluding MPFI)} \\
+		\hline
+		\textit{GAN} & 4h19m & 2m & 4h21m\\
+		\textit{SCRN} & 23h25m & 11m & 23h36m\\
+		\textit{SCR-GAN} & 35h30m & 11m & 35h41m\\
+		\hline
+	\end{tabular}
+	\caption{\textit{GPU time to train and apply the model on a 3D common receiver gather of the same dimension [t,x,y]=[500,601,826].}}
+	\label{tab:cputime}
+\end{table}
+
+\noindent Our best model, SCRN, required 5.4 times more computational resources for training compared to GAN, and 5 times more for model application. This is because SCRN is a deeper model that involves 3 times the total multiply-accumulate operations (MACs) compared to GAN (see Figure \ref{fig:gan_sum} and \ref{fig:scrn_sum} in the Appendix). Note that our model is trained on two common receiver gathers (MPFI-TDRI pair), and the image translation is applied on thousands of gathers with the trained model. Since the model training is a one-time process, this cost is incurred only once. For subsequent image translation, we consider only the 3D MPFI computational cost (13 hours) plus the application time. As the image translation time for thousands of 3D common receiver gather with dimensions [t,x,y]=[500,601,826] is less than one-fifth of an hour on a GPU, the total computational time equals to 13 CPU hours plus 0.2 GPU hour. Note that MPFI and TDRI are measured in CPU hours, while our method is measured in GPU hours. There is no direct conversion between CPU and GPU hours, as it depends on the computer model. Nevertheless, it is clear that our method is significantly faster, by nearly four orders of magnitude, compared to the 127,294 CPU hours required for 3D TDRI on thousands of common receiver gathers (Figure \ref{fig:time}).
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Figure/results/hours.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Computational time of TDRI and low-to-high-quality seismic image translation. }}
+	\label{fig:time}
+\end{figure}
+
+\section{Limitations}
+Despite SCRN's high-quality image translation capabilities and relatively low computational requirements, the method has limitations due to inherent noise in the dataset and the limited amount of training data.
+
+\subsection{Garbage in, garbage out} \label{subsec:garbage}
+Deep learning relies heavily on accurate datasets to produce satisfactory results. In our study, the raw dataset $D$ fed into Omega (a seismic processing software) contains $n$ traces. MPFI and TDRI performed 3D interpolation from a 50x100m grid to a 12.5x12.5m grid, effectively adding 7 extra traces between the measurement traces in our crossline slices. However, this interpolation can introduce artifacts into the data. Ideally, the difference $\text{MPFI}(D) - \text{TDRI}(D)$ should be zero for every 8th trace (column) as they are at the positions where data were actually measured. Figure \ref{fig:garbage} reveals inherent noise in our TDRI and MPFI datasets, as the difference every 8th trace contains residuals. While all traces exhibit some level of noise, those at these specific positions have minimal noise and are closest to the actual measurements. Given that our training dataset contains noise, the quality of the generated images is influenced by the quality of the dataset, causing the model to learn both the underlying signals and noises.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/results/garbage.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Inherent noise in training datasets can lead to artifacts in the generated images. (a) Displays the difference between MPFI and TDRI slices; (b) Shows every 8th trace from the MPFI-TDRI difference; (c) Illustrates the difference between MPFI and Pseudo-TDRI(SCRN) slices; (d) Shows every 8th trace from the MPFI-Pseudo-TDRI(SCRN) difference. The orange boxes zoom into the area between $t=240-290$ and $x=400-450$, with yellow arrows highlighting residuals at every 8th traces caused by noise in the datasets.}}
+	\label{fig:garbage}
+\end{figure}
+
+\subsection{Limited data, limited generalisation}
+Performing 3D TDRI for all common receiver gathers over an area of 3700 km$^{2}$ requires 127,294 CPU hours, and only 13 CPU hours for 3D MPFI. Despite running these interpolations in parallel, generating TDRI-MPFI pairs for training is extremely computationally expensive. While MPFI data is abundant and covers various subsurface types, our supervised training method requires both TDRI and MPFI datasets. Currently, our model is trained solely on data from the Gulf of Mexico. To enhance the robustness of our model, we need datasets from diverse locations to handle a broader range of seismic reflection patterns. However, the difficulty in obtaining these datasets, especially for TDRI data, poses a significant challenge to achieving model generalisation.
+\\\\
+One potential solution is to re-train the network for each project. This approach would involve selecting a representative subset of data, as small as possible, to perform both MPFI and TDRI. While this would increase costs, the use of a smaller training and validation subset could still result in significant savings.
+
+% Limited availability of TDRI training data
+
+\section{Future research}
+
+\subsection{Improvement on the SCRN model} \label{subsec:freqaug}
+
+\subsubsection{Weighting key traces during model training}
+When training our SCRN model, we initially assigned equal weighting to all traces (columns) in our patches. However, as discussed in Section \ref{subsec:garbage}, the positions of the originally measured traces interpolated by MPFI (and TDRI)  contains less noise. Assigning higher weighting to these less noisy traces could improve image translation results by guiding the model to focus and learn from the most accurate parts of the image.
+
+\subsubsection{Expanding the training data with common receiver gathers}
+Despite our 5D dataset being collected from a single location, we can generate thousands of 3D seismic volumes by selecting different common receiver locations. Initially, we trained our SCRN model using only two common receiver gathers (one MPFI and one TDRI). To enhance model generalisation, we can resume training by loading the pre-trained SCRN model and feeding it patch pairs extracted from the remaining common receiver gathers. 
+
+\subsubsection{Increasing dataset variety through frequency augmentation} 
+Another effective way to expand the variety of our existing dataset is through image augmentation. By applying frequency filters to our broadband data—such as 0-5 Hz, 5-10 Hz, 10-25 Hz, and $>$25 Hz (see Figure \ref{fig:5freq})—we can increase the dataset size fivefold, as each frequency band produces an additional seismic volume. It is crucial to adjust the normalisation weighting for each frequency band to ensure consistent scaling across the data. This prevents issues where certain frequency components might dominate due to their larger magnitude, thereby maintaining balanced input for the model.
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/results/5freq.png} % Replace 'example-image' with your image file name
+	\caption{\textit{Using frequency filters to create 5-times the dataset.}}
+	\label{fig:5freq}
+\end{figure}
+
+\subsection{Low-to-high-quality seismic image translation on other applications}
+In this thesis, we have demonstrated the feasibility of low-to-high-quality seismic image translation using the MPFI-TDRI datasets. The ultimate objective is to apply this two-step workflow to create various high-quality seismic solutions at a lower cost, as illustrated in Figure \ref{fig:lhc} in Chapter \ref{ch:intro}.
+\\\\
+Extending beyond the interpolation applications, we explored this workflow on seismic deconvolution. Deconvolution of upgoing and downgoing wavefields is a technique used to remove the water column effect from ocean-bottom node (OBN) seismic data, thereby attenuating free-surface multiples \cite{wang2009comes} and providing an estimate of the Green's function (subsurface reflectivity). A technology called Up-down deconvolution (UDD) effectively produces optimal Green’s function for flat seabeds and mildly varying subsurface structures. However, UDD becomes unstable in the presence of seabed tilts with sharp lateral variations, such as faults \cite{amundsen2001elimination,wang2009comes,boiero2021up}. A more general approach,  multi-dimensional deconvolution (MDD), can overcome these limitations for any geological scenario, stabilising the estimation of Green’s function \cite{wapenaar2011seismic}. Unfortunately, MDD involves severely higher computational cost and typically requires more complex flows.
+\\\\
+In OBN scenarios, data is often acquired with sparser receiver spacing to reduce costs. To enable integration along receivers, interpolation is necessary. MDD requires stable interpolation across sparsely sampled receivers, significantly increasing the computational burden and complexity compared to UDD, which operates on common receiver gathers without such interpolation \cite{wapenaar2011seismic,ravasi2015seismic}. Therefore, if we can use deep learning to translate UDD results to MDD outputs, it would substantially reduce the associated costs.
+\\\\
+We experimented training the SCRN model (Figure \ref{fig:scrn_archi}) with selected parameters (Table \ref{tab:model_param}) on the UDD-MDD dataset. By applying the same workflow but with a different dataset (see Figure \ref{fig:uddmdd}), we translated UDD images to their MDD counterparts.
+\\
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{Figure/results/uddmdd.png} % Replace 'example-image' with your image file name
+	\caption{\textit{2-Step deep learning workflow for UDD-MDD seismic image translation.}}
+	\label{fig:uddmdd}
+\end{figure}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Figure/results/mdd.png} % Replace 'example-image' with your image file name
+	\caption{\textit{UDD slice (input), MDD slice (reference) and Pseudo MDD slice (reconstructed using deep learning).}}
+	\label{fig:mdd}
+\end{figure}
+
+\noindent Our preliminary results, shown in Figure \ref{fig:mdd}, indicate that while the resemblance of the reconstructed MDD slice is not exceptionally high due to non-optimised model parameters for the UDD-MDD purpose, the approach shows potential.\\
+
+\noindent From both the UDD-MDD and particularly MPFI-TDRI image translation results, this approach can be extended to other seismic applications upon further research, offering a efficient solution for enhancing seismic image quality. With optimisation and refinement of model parameters, this workflow could revolutionise the processing seismic data, providing more accurate and cost-effective solutions in the field of geophysics.
+
+
